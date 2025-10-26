@@ -1,11 +1,17 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "module": "commonjs",
+    "noEmit": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["vite/client"],
+    "types": ["vite/client", "jest", "node"],
     "jsx": "react-jsx"
   },
-  "include": ["src"]
+  "include": ["src", "**/*.test.ts", "**/*.test.tsx"]
 }
