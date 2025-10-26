@@ -1,0 +1,93 @@
+@import "./variables.css";
+
+.modoClaro {
+  --color-fondo: #eee;
+  --color-fuente-principal: #111;
+  --color-fuente-secundaria: #222;
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  font-family: var(--fuente-principal);
+  background-color: var(--color-fondo);
+  color: var(--color-fuente-principal);
+
+  line-height: 1.6;
+  letter-spacing: 0.015em;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+p {
+  font-size: 1rem;
+}
+
+a {
+  color: var(--color-acento);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-acento-hover);
+}
+
+h6 {
+  font-size: 1.125rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+@media (min-width: 600px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 900px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1200px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}

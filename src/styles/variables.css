@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap");
+
+:root {
+  --fuente-principal: "Roboto", sans-serif;
+  --fuente-encabezado: "Orbitron", sans-serif;
+
+  --color-acento: #1e90ff;
+  --color-acento-hover: #1980e7;
+
+  --color-fondo: #111;
+  --color-fuente-principal: #eee;
+  --color-fuente-secundario: #ddd;
+
+  --color-texto-blanco: #eee;
+
+  font-size: clamp(14px, 0.8vw + 0.8rem, 18px);
+}
