@@ -32,7 +32,7 @@ describe("Componente Button", () => {
     expect(button).toHaveAttribute("type", "submit");
   });
 
-  test("applies CSS class", () => {
+  test("Aplica correctamente la clase", () => {
     render(<Button>Boton</Button>);
     const button = screen.getByText("Boton");
     expect(button).toHaveClass("button");
