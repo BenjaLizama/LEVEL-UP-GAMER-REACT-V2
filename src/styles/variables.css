@@ -14,5 +14,7 @@
 
   --color-texto-blanco: #eee;
 
+  --sombra-icono: 0px 2px 2px #000000a6;
+
   font-size: clamp(14px, 0.8vw + 0.8rem, 18px);
 }
