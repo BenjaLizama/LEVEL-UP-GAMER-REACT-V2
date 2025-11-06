@@ -1,0 +1,40 @@
+.button {
+  max-width: 50%;
+
+  user-select: none;
+  cursor: pointer;
+  outline: none;
+  border: none;
+
+  font-family: var(--fuente-principal);
+
+  background-color: var(--color-acento);
+  color: var(--color-texto-blanco);
+
+  padding: 0.5rem;
+  border-radius: 0.35rem;
+
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  background-color: var(--color-acento-hover);
+}
+
+@media (min-width: 600px) {
+  .button {
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .button {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .button {
+    font-size: 1.5rem;
+  }
+}
