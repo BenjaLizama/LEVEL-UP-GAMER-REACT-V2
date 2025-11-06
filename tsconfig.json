@@ -10,7 +10,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["vite/client", "jest", "node"],
+    "types": ["vite/client", "jest", "node", "@testing-library/jest-dom"],
     "jsx": "react-jsx"
   },
   "include": ["src", "**/*.test.ts", "**/*.test.tsx"]
