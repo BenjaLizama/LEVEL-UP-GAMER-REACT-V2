@@ -1,0 +1,15 @@
+.input {
+  outline: none;
+  text-align: start;
+
+  width: 100%;
+  max-width: 400px;
+
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 0.4rem;
+  border: 2px solid var(--color-acento);
+
+  background-color: rgba(0, 0, 0, 0.2);
+  color: var(--color-texto);
+}
