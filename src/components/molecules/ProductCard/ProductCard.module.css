@@ -1,0 +1,86 @@
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  padding: 0.5rem;
+  background-color: var(--color-texto-principal);
+  box-shadow: var(--sombra) inset;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  background-color: var(--color-hover-producto);
+}
+
+.first {
+  display: flex;
+  width: 50%;
+}
+
+.imagen {
+  user-select: none;
+  width: 110px;
+  height: auto;
+  border-radius: 5px;
+  -webkit-user-drag: none;
+}
+
+.second {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+}
+
+.third {
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.addButtonCart {
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: none;
+  color: var(--color-texto-principal);
+  transition: all 0.2s ease;
+}
+
+.addButtonCart:hover {
+  color: var(--color-acento);
+}
+
+.addButtonCartSpan {
+  position: absolute;
+  top: 0;
+  left: 1;
+  right: 0;
+  bottom: 0;
+  transform: translateY(-3px) translateX(-2px);
+  font-weight: 700;
+}
+
+.nombre {
+  font-size: 1rem;
+}
+
+.precio {
+  color: var(--color-acento);
+  font-size: 1.2rem;
+}
+
+.stock {
+  font-size: 0.9rem;
+}
