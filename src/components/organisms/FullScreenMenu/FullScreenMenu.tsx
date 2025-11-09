@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import styles from "./FullScreenMenu.module.css";
 import { Link } from "react-router-dom";
-import SimpleIcon from "@/components/atoms/SimpleIcon/SimpleIcon";
-import { HOME, LINK_EXTERNAL } from "@/utils/Icons";
 
 export interface NavItem {
   label: string;
