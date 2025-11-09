@@ -34,6 +34,7 @@ export default function App() {
         onMenuToggle={() => setIsMenuOpen(!isMenuOpen)}
         isLightMode={modoClaro}
         onThemeToggle={() => setModoClaro(!modoClaro)}
+        links={navLinks}
       />
 
       <FullScreenMenu
