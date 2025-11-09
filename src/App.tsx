@@ -11,6 +11,7 @@ import NavBar from "@/components/organisms/NavBar/NavBar";
 import FullScreenMenu, {
   NavItem,
 } from "@/components/organisms/FullScreenMenu/FullScreenMenu";
+import Test from "./components/pages/Test";
 
 export default function App() {
   const [modoClaro, setModoClaro] = useState(false);
@@ -49,6 +50,9 @@ export default function App() {
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />} />
+
+          {/* Esto debe ser eliminado en la version final */}
+          <Route path="/test" element={<Test />} />
         </Routes>
       </main>
     </div>
