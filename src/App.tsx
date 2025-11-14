@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Home from "@/components/pages/Home";
-import Marketplace from "@/components/pages/Marketplace";
+import Store from "@/components/pages/Store/Store";
 import Cart from "@/components/pages/Cart";
 import Profile from "@/components/pages/Profile";
 
@@ -47,7 +47,7 @@ export default function App() {
       <main style={{ minHeight: "100vh" }}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/marketplace" element={<Store />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />} />
 

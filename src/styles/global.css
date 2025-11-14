@@ -72,6 +72,16 @@ h1 {
   font-size: 3rem;
 }
 
+select option {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+select option:hover {
+  background-color: #007bff;
+  color: white;
+}
+
 @media (min-width: 600px) {
   html {
     font-size: 15px;
