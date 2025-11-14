@@ -10,7 +10,18 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["vite/client", "jest", "node", "@testing-library/jest-dom"],
+    "lib": ["dom", "dom.iterable", "esnext"],
+
+    // MODIFICA ESTA LÍNEA
+    "types": [
+      "vite/client",
+      "jest",
+      "node",
+      "@testing-library/jest-dom",
+      "react",
+      "react-dom"
+    ],
+
     "jsx": "react-jsx"
   },
   "include": ["src", "**/*.test.ts", "**/*.test.tsx"]
