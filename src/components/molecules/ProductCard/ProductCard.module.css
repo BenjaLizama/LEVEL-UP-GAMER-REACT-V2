@@ -18,7 +18,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30%;
+  width: 55%;
   height: 100%;
   background-color: #ffffff;
   border-radius: 5px;
@@ -26,10 +26,12 @@
 
 .imagen {
   user-select: none;
-  width: 110px;
-  height: auto;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
   border-radius: 5px;
   -webkit-user-drag: none;
+  object-fit: contain;
 }
 
 .second {
@@ -110,8 +112,11 @@
   }
 
   .imagen {
-    width: 100%;
-    height: auto;
+    width: auto;
+    height: 100%; /* Le decimos que intente llenar el contenedor */
+    max-height: 15rem; /* <-- ESTA ES LA LÍNEA CLAVE. (15rem = 240px) */
+    /* Ajusta este valor (ej: 12rem, 18rem) al tamaño máximo que desees */
+    object-fit: contain;
   }
 
   .second {
