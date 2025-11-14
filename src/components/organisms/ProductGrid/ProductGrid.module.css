@@ -1,6 +1,7 @@
 .gridContainer {
   display: grid;
   row-gap: 0.8rem;
+  padding-bottom: 4rem;
 }
 
 @media (min-width: 768px) {
