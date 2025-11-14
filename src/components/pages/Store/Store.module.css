@@ -1,0 +1,26 @@
+.searchContainer {
+  padding: 1rem 0rem;
+  display: grid;
+  width: 100%;
+  row-gap: 0.5rem;
+  justify-self: center;
+}
+
+.searchContainer input {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .searchContainer {
+    width: 80%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .searchContainer {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2rem;
+    justify-content: center;
+    align-items: center;
+  }
+}
