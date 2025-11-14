@@ -3,9 +3,34 @@
   row-gap: 0.8rem;
 }
 
-@media (min-width: 780px) {
+@media (min-width: 768px) {
   .gridContainer {
     grid-template-columns: 1fr 1fr;
     column-gap: 0.8rem;
+    row-gap: 2rem;
+    max-width: 100%;
+    padding-bottom: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .gridContainer {
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 0rem 2rem;
+    padding-bottom: 4rem;
+  }
+}
+
+@media (min-width: 1320px) {
+  .gridContainer {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media (min-width: 1600px) {
+  .gridContainer {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    padding: 0rem 6rem;
+    padding-bottom: 4rem;
   }
 }
