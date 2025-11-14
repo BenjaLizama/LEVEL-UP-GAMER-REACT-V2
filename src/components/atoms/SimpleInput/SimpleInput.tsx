@@ -6,6 +6,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   value: string;
   type: InputType;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  className: string;
 }
 
 export default function SimpleInput({ className, ...rest }: Props) {
