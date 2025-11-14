@@ -8,6 +8,7 @@ type PlantillaProps = {
   icono: React.ReactNode;
   children?: React.ReactNode;
 };
+//este componente se utiliza para cuando no alla algo como un carrito vacio o no se encuentre algo como un producto
 
 export default function Empty(props: PlantillaProps) {
   return (
