@@ -7,9 +7,34 @@ export const productoService = {
   getAllProducts: async (): Promise<Producto[]> => {
     try {
       const response = await axios.get<Producto[]>(`${API_URL}`);
+      if (response.status === 204) {
+        return [];
+      }
       return response.data;
     } catch (error) {
       console.error("Error al obtener productos: ", error);
+      throw error;
+    }
+  },
+
+  filtrarProductosPorCategoria: async (
+    categoria: string
+  ): Promise<Producto[]> => {
+    try {
+      const response = await axios.get<Producto[]>(`${API_URL}/filtrar`, {
+        params: {
+          categoria: categoria,
+        },
+      });
+
+      if (response.status === 204) {
+        return [];
+      }
+
+      return response.data;
+    } catch (error) {
+      // 4. EL 'CATCH' VIENE AL FINAL
+      console.error("Error al filtrar productos por categoria: ", error);
       throw error;
     }
   },
