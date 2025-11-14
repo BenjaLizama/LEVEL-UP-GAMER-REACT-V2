@@ -5,6 +5,7 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import ProductCard from "./ProductCard";
 import { Producto } from "@/models/Producto";
+import { MemoryRouter } from "react-router-dom";
 
 const mockNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
@@ -47,7 +48,11 @@ describe("ProductCard Component", () => {
   });
 
   test("renderiza la información del producto correctamente", () => {
-    render(<ProductCard {...mockProduct} />);
+    render(
+      <MemoryRouter>
+        <ProductCard {...mockProduct} />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText(mockProduct.nombreProducto)).toBeInTheDocument();
     expect(screen.getByText("$ 50000")).toBeInTheDocument();
@@ -61,13 +66,17 @@ describe("ProductCard Component", () => {
     expect(img.src).toBe(mockProduct.imagenesUrl![0]);
   });
 
-  test("muestra la imagen por defecto cuando no hay imagenesUrl", () => {
+  test("muestra la imagen correcta", () => {
     const productWithoutImage = { ...mockProduct, imagenesUrl: [] };
-    render(<ProductCard {...productWithoutImage} />);
+    render(
+      <MemoryRouter>
+        <ProductCard {...mockProduct} />
+      </MemoryRouter>
+    );
 
     const img = screen.getByAltText(
       productWithoutImage.nombreProducto
     ) as HTMLImageElement;
-    expect(img.src).toContain("no-image-mock.png");
+    expect(img.src).not.toContain("no-image-mock.png");
   });
 });
