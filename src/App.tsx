@@ -2,10 +2,10 @@ import "@/styles/global.css";
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
-import Home from "@/components/pages/Home";
+import Home from "@/components/pages/Home/Home";
 import Store from "@/components/pages/Store/Store";
-import Cart from "@/components/pages/Cart";
-import Profile from "@/components/pages/Profile";
+import Cart from "@/components/pages/Cart/Cart";
+import Profile from "@/components/pages/Profile/Profile";
 
 import NavBar from "@/components/organisms/NavBar/NavBar";
 import FullScreenMenu, {
