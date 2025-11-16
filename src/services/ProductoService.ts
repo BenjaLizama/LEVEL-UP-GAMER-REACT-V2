@@ -33,7 +33,6 @@ export const productoService = {
 
       return response.data;
     } catch (error) {
-      // 4. EL 'CATCH' VIENE AL FINAL
       console.error("Error al filtrar productos por categoria: ", error);
       throw error;
     }

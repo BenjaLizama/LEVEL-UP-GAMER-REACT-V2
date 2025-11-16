@@ -1,11 +1,9 @@
-// 1. Modifica la interfaz (modelo)
 export interface Categoria {
-  id: number; // Lo usamos para el 'key' de React
-  value: string; // El valor EXACTO del Enum (para la API)
-  nombreVisible: string; // El texto que verá el usuario
+  id: number;
+  value: string;
+  nombreVisible: string;
 }
 
-// 2. Actualiza tu lista de constantes
 export const CATEGORIAS_POR_DEFECTO: Categoria[] = [
   { id: 1, value: "JUEGO_MESA", nombreVisible: "Juegos de Mesa" },
   { id: 2, value: "ACCESORIOS", nombreVisible: "Accesorios" },

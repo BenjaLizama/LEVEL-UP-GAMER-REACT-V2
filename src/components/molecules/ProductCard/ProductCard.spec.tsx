@@ -40,6 +40,7 @@ const mockProduct: Producto = {
   precioProducto: 50000,
   imagenesUrl: ["https://example.com/teclado.jpg"],
   cantidadStockProducto: 10,
+  categoriaProducto: "Periféricos",
 };
 
 describe("ProductCard Component", () => {
