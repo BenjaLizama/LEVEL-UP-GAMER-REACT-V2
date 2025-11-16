@@ -28,12 +28,14 @@ export default function NavBar({
       </div>
       {/* Diseño mobile */}
       <div className={styles.middle}>
-        <img
-          className={styles.logo}
-          draggable="false"
-          src={logoImg}
-          alt="Logo LEVEL-UP GAMER"
-        />
+        <Link to={"/"} className={styles.middleLink}>
+          <img
+            className={styles.logo}
+            draggable="false"
+            src={logoImg}
+            alt="Logo LEVEL-UP GAMER"
+          />
+        </Link>
       </div>
       {/* Diseño escritorio */}
       <div className={styles.middleDesktop}>
