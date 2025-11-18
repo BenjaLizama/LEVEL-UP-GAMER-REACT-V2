@@ -96,9 +96,16 @@ describe("NavBar Component", () => {
     });
   });
 
-  test("no renderiza links si el array está vacío", () => {
+  test("no renderiza links de navegación extra si el array está vacío", () => {
     renderWithRouter(<NavBar {...defaultProps} links={[]} />);
-    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+
+    const allLinks = screen.queryAllByRole("link");
+    expect(allLinks).toHaveLength(1);
+
+    expect(allLinks[0]).toHaveAttribute("href", "/");
+
+    expect(screen.queryByText("Inicio")).not.toBeInTheDocument();
+    expect(screen.queryByText("Juegos")).not.toBeInTheDocument();
   });
 
   test("pasa las props correctas al HamburgerButton", () => {

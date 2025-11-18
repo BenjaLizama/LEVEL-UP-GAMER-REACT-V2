@@ -1,5 +1,4 @@
 import React from "react";
-// 1. Asegúrate de importar la interfaz actualizada
 import { Categoria } from "@/models/Categoria";
 import styles from "./CategoryFilter.module.css";
 
@@ -24,11 +23,12 @@ export default function CategoryFilter(props: CategoryFilterProps) {
         value={categoriaSeleccionada}
         onChange={handleCategoriaSeleccionada}
         className={styles.selector}
+        aria-label="Filtrar por categoria"
       >
         <option value="">Todas las categorias</option>
 
         {categorias.map((categoria) => (
-          <option key={categoria.id} value={categoria.value}>
+          <option key={categoria.id} value={categoria.id}>
             {categoria.nombreVisible}
           </option>
         ))}

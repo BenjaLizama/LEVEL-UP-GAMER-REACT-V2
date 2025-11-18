@@ -5,9 +5,9 @@ import CategoryFilter from "./CategoryFilter";
 import { Categoria } from "@/models/Categoria";
 
 const mockCategories: Categoria[] = [
-  { id: 1, nombre: "Electrónica" },
-  { id: 2, nombre: "Ropa" },
-  { id: 3, nombre: "Hogar" },
+  { id: 1, value: "Electrónica", nombreVisible: "Electrónica" },
+  { id: 2, value: "Ropa", nombreVisible: "Ropa" },
+  { id: 3, value: "Hogar", nombreVisible: "Hogar" },
 ];
 
 const mockOnCategoriaChange = jest.fn();
