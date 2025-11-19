@@ -1,6 +1,6 @@
 import "@/styles/global.css";
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import Home from "@/components/pages/Home/Home";
 import Store from "@/components/pages/Store/Store";
@@ -12,6 +12,8 @@ import FullScreenMenu, {
   NavItem,
 } from "@/components/organisms/FullScreenMenu/FullScreenMenu";
 import Test from "./components/pages/Test";
+import Login from "./components/pages/Login/Login";
+import Signup from "./components/pages/SignUp/Signup";
 
 export default function App() {
   const [modoClaro, setModoClaro] = useState(false);
@@ -50,6 +52,8 @@ export default function App() {
           <Route path="/marketplace" element={<Store />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Signup />} />
 
           {/* Esto debe ser eliminado en la version final */}
           <Route path="/test" element={<Test />} />
