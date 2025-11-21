@@ -1,6 +1,6 @@
 import "@/styles/global.css";
 import { useEffect, useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import Home from "@/components/pages/Home/Home";
 import Store from "@/components/pages/Store/Store";
@@ -53,7 +53,7 @@ export default function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/login" element={<Signup />} />
+          <Route path="/register" element={<Signup />} />
 
           {/* Esto debe ser eliminado en la version final */}
           <Route path="/test" element={<Test />} />

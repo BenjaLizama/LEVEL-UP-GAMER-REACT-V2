@@ -18,4 +18,12 @@ export const usuarioService = {
       throw error;
     }
   },
+
+  signup: async (informacion: SignupDTO): Promise<Usuario> => {
+    try {
+    } catch (error) {
+      console.error("Error al crear el usuario: ", error);
+      throw new Error();
+    }
+  },
 };

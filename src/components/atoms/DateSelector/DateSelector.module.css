@@ -1,0 +1,23 @@
+input[type="date"] {
+  /* Basic styling */
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-size: 16px;
+  color: #333;
+  width: 200px; /* Example width */
+
+  /* Customize appearance */
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+
+  /* Remove default browser styles if desired */
+  -webkit-appearance: none; /* For Webkit browsers */
+  appearance: none;
+}
+
+input[type="date"]:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
