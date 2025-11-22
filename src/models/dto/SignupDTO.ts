@@ -3,6 +3,6 @@ export interface SignupDTO {
   nombre: string;
   apellido: string;
   correo: string;
-  fechaNacimiento: Date;
+  fechaNacimiento: string;
   contrasena: string;
 }
