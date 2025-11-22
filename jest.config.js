@@ -14,4 +14,11 @@ export default {
     "<rootDir>/src/**/*.spec.{ts,tsx}",
     "<rootDir>/src/**/*.test.{ts,tsx}",
   ],
+  moduleNameMapper: {
+    "\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/fileMock.js",
+
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+
+    "^@/(.*)$": "<rootDir>/src/$1",
+  },
 };

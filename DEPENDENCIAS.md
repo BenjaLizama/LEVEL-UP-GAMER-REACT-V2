@@ -2,3 +2,4 @@
 
 - npm install
 - npm install react-router-dom
+- npm install --save-dev whatwg-url
