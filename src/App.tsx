@@ -1,6 +1,6 @@
 import "@/styles/global.css";
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import Home from "@/components/pages/Home/Home";
 import Store from "@/components/pages/Store/Store";
@@ -19,6 +19,11 @@ export default function App() {
   const [modoClaro, setModoClaro] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const rutaActual = useLocation();
+  const ocultarNavBarRutas = ["/login", "/register"];
+
+  const isNavBarOculta = ocultarNavBarRutas.includes(rutaActual.pathname);
+
   const navLinks: NavItem[] = [
     { label: "INICIO", to: "/" },
     { label: "TIENDA", to: "/marketplace" },
@@ -32,19 +37,23 @@ export default function App() {
 
   return (
     <div>
-      <NavBar
-        isMenuOpen={isMenuOpen}
-        onMenuToggle={() => setIsMenuOpen(!isMenuOpen)}
-        isLightMode={modoClaro}
-        onThemeToggle={() => setModoClaro(!modoClaro)}
-        links={navLinks}
-      />
+      {!isNavBarOculta && (
+        <>
+          <NavBar
+            isMenuOpen={isMenuOpen}
+            onMenuToggle={() => setIsMenuOpen(!isMenuOpen)}
+            isLightMode={modoClaro}
+            onThemeToggle={() => setModoClaro(!modoClaro)}
+            links={navLinks}
+          />
 
-      <FullScreenMenu
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-        links={navLinks}
-      />
+          <FullScreenMenu
+            isOpen={isMenuOpen}
+            onClose={() => setIsMenuOpen(false)}
+            links={navLinks}
+          />
+        </>
+      )}
 
       <main style={{ minHeight: "100vh" }}>
         <Routes>
