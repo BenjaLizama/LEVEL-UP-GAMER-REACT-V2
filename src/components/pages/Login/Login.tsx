@@ -7,6 +7,7 @@ import { EMAIL, KEY } from "@/utils/Icons";
 import axios from "axios";
 import { LoginDTO } from "@/models/dto/LoginDTO";
 import { usuarioService } from "@/services/UsuarioService";
+import LogoButton from "@/components/atoms/LogoButton/LogoButton";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -109,6 +110,7 @@ export default function Login() {
   return (
     <div className={styles.formContainer}>
       <form className={styles.form} onSubmit={handleSubmit}>
+        <LogoButton />
         <h2>Acceder</h2>
         <Input
           id="login-email"

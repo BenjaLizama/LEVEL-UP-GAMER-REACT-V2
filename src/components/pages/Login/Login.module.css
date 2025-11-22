@@ -1,7 +1,7 @@
-/* 1. El Contenedor (Padre) */
 .formContainer {
   margin-top: 4rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   align-self: center;
@@ -16,9 +16,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  max-width: 550px;
-
+  width: 80%;
+  max-width: 450px;
   padding: 2.5rem;
   border-radius: 8px;
   background-color: var(--fondo-transparente);

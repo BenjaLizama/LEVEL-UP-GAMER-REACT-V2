@@ -5,28 +5,33 @@ import Button from "@/components/atoms/Button/Button";
 import Input from "@/components/atoms/Input/Input";
 import axios from "axios";
 import { EMAIL, KEY, USER } from "@/utils/Icons";
-// ⚠️ Nota: Asegúrate de importar tu DTO de registro correcto, que en el backend era AgregarUsuarioDTO
-// Usaremos un tipo temporal aquí, pero tú lo reemplazarás.
-
-// ❌ Quitamos la importación de LoginDTO, ya que estamos registrando.
+import LogoButton from "@/components/atoms/LogoButton/LogoButton";
+import { SignupDTO } from "@/models/dto/SignupDTO";
+import { usuarioService } from "@/services/UsuarioService";
+import DateSelector from "@/components/atoms/DateSelector/DateSelector";
+import { validarEdad } from "@/utils/ValidarEdad";
 
 export default function Signup() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState<string>("");
   const [pass, setPass] = useState<string>("");
-  const [nombreUsuario, setNombreUsuario] = useState<string>(""); // Nuevo campo
-  const [nombre, setNombre] = useState<string>(""); // Nuevo campo // --- 2. ESTADOS DE ERROR DE FORMULARIO ---
+  const [confirmPass, setConfirmPass] = useState<string>("");
+  const [nombreUsuario, setNombreUsuario] = useState<string>("");
+  const [nombre, setNombre] = useState<string>("");
   const [apellido, setApellido] = useState<string>("");
+  const [edad, setEdad] = useState<string>("");
 
   const [emailError, setEmailError] = useState<string>("");
   const [passError, setPassError] = useState<string>("");
+  const [confirmPassError, setConfirmPassError] = useState<string>("");
   const [nombreUsuarioError, setNombreUsuarioError] = useState<string>("");
-  const [nombreError, setNombreError] = useState<string>(""); // --- 3. ESTADOS DE UI/API ---
+  const [nombreError, setNombreError] = useState<string>("");
   const [apellidoError, setApellidoError] = useState<string>("");
+  const [edadError, setEdadError] = useState<string>("");
 
   const [isLoading, setIsLoading] = useState(false);
-  const [apiError, setApiError] = useState(""); // --- 4. HANDLERS DE CAMBIO ---
+  const [apiError, setApiError] = useState("");
 
   const handleEmailChange = (newValue: string) => {
     setEmail(newValue);
@@ -36,6 +41,11 @@ export default function Signup() {
   const handlePassChange = (newValue: string) => {
     setPass(newValue);
     if (passError) setPassError("");
+  };
+
+  const handleConfirmPassChange = (newValue: string) => {
+    setConfirmPass(newValue);
+    if (passError) setConfirmPassError("");
   };
 
   const handleNombreUsuarioChange = (newValue: string) => {
@@ -53,6 +63,16 @@ export default function Signup() {
     if (apellidoError) setApellidoError("");
   };
 
+  const handleEdadChange = (newValue: string) => {
+    setEdad(newValue);
+    if (edadError) setEdadError("");
+
+    const validationResult = validarEdad(newValue);
+    if (!validationResult.valid) {
+      setEdadError(validationResult.message);
+    }
+  };
+
   const validateForm = (): boolean => {
     let isValid = true;
 
@@ -65,19 +85,24 @@ export default function Signup() {
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError("Introduce un correo válido");
       isValid = false;
-    } // Validación de Contraseña
+    }
 
     if (!pass || pass.length < 6) {
       setPassError("La contraseña debe tener al menos 6 caracteres");
       isValid = false;
-    } // Validación de Nombre de Usuario
+    }
+
+    if (confirmPass !== pass) {
+      setConfirmPassError("Las contraseñas no coinciden");
+      isValid = false;
+    }
 
     if (!nombreUsuario || nombreUsuario.length < 3) {
       setNombreUsuarioError(
         "El nombre de usuario es obligatorio (min. 3 caracteres)"
       );
       isValid = false;
-    } // Validación de Nombre
+    }
 
     if (!nombre) {
       setNombreError("El nombre es obligatorio");
@@ -90,7 +115,7 @@ export default function Signup() {
     }
 
     return isValid;
-  }; // --- 6. HANDLER DE ENVÍO ---
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -99,27 +124,34 @@ export default function Signup() {
       return;
     }
 
-    setIsLoading(true); // 🔑 ESTRUCTURA DE DATOS PARA ENVIAR AL BACKEND // ⚠️ TÚ DEBES COMPLETAR ESTO CON TU DTO COMPLETO (AgregarUsuarioDTO)
+    setIsLoading(true);
 
-    // const nuevoUsuario: AgregarUsuarioDTO = {
-    //   correo: email,
-    //   contrasena: pass,
-    //   nombreUsuario: nombreUsuario,
-    //   nombre: nombre, // ⚠️ Añade aquí todos los demás campos (ej: apellido, fechaNacimiento) // apellido: '...', // fechaNacimiento: '...'
-    // };
+    const nuevoUsuario: SignupDTO = {
+      nombreUsuario: nombreUsuario,
+      nombre: nombre,
+      apellido: apellido,
+      correo: email,
+      fechaNacimiento: edad,
+      contrasena: pass,
+    };
 
     try {
-      // 🚨 PUNTO DE IMPLEMENTACIÓN: Llama al nuevo método de registro
-      // Este método debe estar en UsuarioService y enviar el DTO.
-      // const usuarioRegistrado = await usuarioService.register(nuevoUsuario);
-      // console.log("Usuario registrado con éxito ✅: ", usuarioRegistrado);
-      // Si el registro es exitoso, redirigimos al login
-      // navigate('/login');
+      const usuarioGuardado = await usuarioService.signup(nuevoUsuario);
+
+      if (usuarioGuardado.token) {
+        localStorage.setItem("authToken", usuarioGuardado.token);
+      }
+
+      if (usuarioGuardado.idUsuario) {
+        localStorage.setItem("idUsuario", String(usuarioGuardado.idUsuario));
+      }
+
+      alert(`¡Registro exitoso! Usuario: ${usuarioGuardado.nombre}`);
+      navigate("/");
     } catch (error: unknown) {
-      console.error("Error en la API durante el registro: ", error); // 5. Manejo de errores de Axios
+      console.error("Error en la API durante el registro: ", error);
 
       if (axios.isAxiosError(error) && error.response) {
-        // 409 Conflict: Típico para "Correo o Nombre de Usuario ya registrado"
         if (error.response.status === 409) {
           setApiError(
             "El correo o nombre de usuario ya se encuentra registrado."
@@ -140,6 +172,7 @@ export default function Signup() {
   return (
     <div className={styles.formContainer}>
       <form className={styles.form} onSubmit={handleSubmit}>
+        <LogoButton />
         <h2>Crear Cuenta</h2>
         {/* Nombre de Usuario */}
         <Input
@@ -152,39 +185,52 @@ export default function Signup() {
           errorMessage={nombreUsuarioError}
           className={nombreUsuarioError ? styles.error : ""}
         />
-        {/* Nombre */}
-        <Input
-          id="signup-name"
-          label="Nombre"
-          value={nombre}
-          onValueChange={handleNombreChange}
-          placeholder="Tu Nombre"
-          icon={EMAIL}
-          errorMessage={nombreError}
-          className={nombreError ? styles.error : ""}
-        />
-        {/* Nombre */}
-        <Input
-          id="signup-name"
-          label="Apellido"
-          value={apellido}
-          onValueChange={handleApellidoChange}
-          placeholder="Tu Apellido"
-          icon={EMAIL}
-          errorMessage={apellidoError}
-          className={apellidoError ? styles.error : ""}
-        />
-        {/* Correo Electrónico */}
-        <Input
-          id="signup-email"
-          label="Correo electrónico"
-          value={email}
-          onValueChange={handleEmailChange}
-          placeholder="tucorreo@ejemplo.com"
-          icon={EMAIL}
-          errorMessage={emailError}
-          className={emailError ? styles.error : ""}
-        />
+        <div className={styles.infoUsuario}>
+          {/* Nombre */}
+          <Input
+            id="signup-name"
+            label="Nombre"
+            value={nombre}
+            onValueChange={handleNombreChange}
+            placeholder="Tu Nombre"
+            icon={EMAIL}
+            errorMessage={nombreError}
+            className={nombreError ? styles.error : ""}
+          />
+          {/* Apellido */}
+          <Input
+            id="signup-lastname"
+            label="Apellido"
+            value={apellido}
+            onValueChange={handleApellidoChange}
+            placeholder="Tu Apellido"
+            icon={EMAIL}
+            errorMessage={apellidoError}
+            className={apellidoError ? styles.error : ""}
+          />
+        </div>
+        <div className={styles.infoUsuario}>
+          {/* Correo Electrónico */}
+          <Input
+            id="signup-email"
+            label="Correo electrónico"
+            value={email}
+            onValueChange={handleEmailChange}
+            placeholder="tucorreo@ejemplo.com"
+            icon={EMAIL}
+            errorMessage={emailError}
+            className={emailError ? styles.error : ""}
+          />
+          {/* Edad */}
+          <DateSelector
+            value={edad}
+            onValueChange={handleEdadChange}
+            errorMessage={edadError}
+            placeholder="texto"
+            label="Edad"
+            className={edadError ? styles.error : ""}
+          />
+        </div>
         {/* Contraseña */}
         <Input
           id="signup-pass"
@@ -199,14 +245,14 @@ export default function Signup() {
         />
         {/* TODO: Confirmar Contraseña */}
         <Input
-          id="signup-pass"
+          id="signup-confirm-pass"
           label="Confirmar contraseña"
-          value={pass}
-          onValueChange={handlePassChange}
-          placeholder="Contraseña segura"
+          value={confirmPass}
+          onValueChange={handleConfirmPassChange}
+          placeholder="Confirmar contraseña"
           icon={KEY}
           type="password"
-          errorMessage={passError}
+          errorMessage={confirmPassError}
           className={passError ? styles.error : ""}
         />
         <p>
