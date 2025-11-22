@@ -2,9 +2,9 @@ import React from "react";
 import styles from "./NavBar.module.css";
 import HamburgerButton from "@/components/atoms/HamburguerButton/HamburgerButton";
 import Switch from "../../atoms/Switch/Switch";
-import logoImg from "@/assets/images/Level-Up.png";
 import { NavItem } from "../FullScreenMenu/FullScreenMenu";
 import { Link } from "react-router-dom";
+import LogoButton from "@/components/atoms/LogoButton/LogoButton";
 
 interface NavBarProps {
   isMenuOpen: boolean;
@@ -28,14 +28,7 @@ export default function NavBar({
       </div>
       {/* Diseño mobile */}
       <div className={styles.middle}>
-        <Link to={"/"} className={styles.middleLink}>
-          <img
-            className={styles.logo}
-            draggable="false"
-            src={logoImg}
-            alt="Logo LEVEL-UP GAMER"
-          />
-        </Link>
+        <LogoButton />
       </div>
       {/* Diseño escritorio */}
       <div className={styles.middleDesktop}>
