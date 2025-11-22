@@ -1,0 +1,10 @@
+.container {
+  display: contents;
+  user-select: none;
+  cursor: pointer;
+}
+
+.logo {
+  height: 90px;
+  cursor: pointer;
+}
