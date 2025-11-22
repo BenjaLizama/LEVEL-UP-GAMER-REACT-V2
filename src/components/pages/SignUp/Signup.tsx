@@ -78,9 +78,18 @@ export default function Signup() {
 
     setEmailError("");
     setPassError("");
+    setConfirmPassError("");
     setNombreUsuarioError("");
     setNombreError("");
     setApellidoError("");
+    setEdadError("");
+
+    if (!nombreUsuario || nombreUsuario.length <= 2) {
+      setNombreUsuarioError(
+        "El nombre de usuario debe contener al menos 3 caracteres"
+      );
+      isValid = false;
+    }
 
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError("Introduce un correo válido");
@@ -97,10 +106,8 @@ export default function Signup() {
       isValid = false;
     }
 
-    if (!nombreUsuario || nombreUsuario.length < 3) {
-      setNombreUsuarioError(
-        "El nombre de usuario es obligatorio (min. 3 caracteres)"
-      );
+    if (confirmPass.length <= 0) {
+      setConfirmPassError("La contraseña no puede estar vacía");
       isValid = false;
     }
 
@@ -111,6 +118,11 @@ export default function Signup() {
 
     if (!apellido) {
       setApellidoError("El apellido es obligatorio");
+      isValid = false;
+    }
+
+    if (!edad) {
+      setEdadError("Debes ingresar una edad");
       isValid = false;
     }
 
@@ -172,7 +184,9 @@ export default function Signup() {
   return (
     <div className={styles.formContainer}>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <LogoButton />
+        <div className={styles.logoContainer}>
+          <LogoButton />
+        </div>
         <h2>Crear Cuenta</h2>
         {/* Nombre de Usuario */}
         <Input
@@ -261,7 +275,7 @@ export default function Signup() {
         <Button type="submit" disabled={isLoading}>
           {isLoading ? "Registrando..." : "Registrarme"}
         </Button>
-        {apiError && <p className={styles.apiError}>{apiError}</p>}
+        {apiError && <p className={styles.mensajeError}>{apiError}</p>}
       </form>
     </div>
   );

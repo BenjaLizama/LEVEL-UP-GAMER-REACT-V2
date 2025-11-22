@@ -110,7 +110,9 @@ export default function Login() {
   return (
     <div className={styles.formContainer}>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <LogoButton />
+        <div className={styles.logoContainer}>
+          <LogoButton />
+        </div>
         <h2>Acceder</h2>
         <Input
           id="login-email"
@@ -143,7 +145,7 @@ export default function Login() {
           {isLoading ? "Cargando..." : "Acceder"}
         </Button>
 
-        <p>{apiError}</p>
+        <p className={styles.mensajeError}>{apiError}</p>
       </form>
     </div>
   );

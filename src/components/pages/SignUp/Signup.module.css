@@ -25,6 +25,10 @@
   transition: all 0.2s ease;
 }
 
+.logoContainer {
+  transform: scale(1.6);
+}
+
 .infoUsuario {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -34,6 +38,11 @@
 .error {
   border: 1px solid rgb(241, 15, 15);
   transition: all 0.2s ease;
+}
+
+.mensajeError {
+  text-align: center;
+  color: rgb(241, 15, 15);
 }
 
 @media (min-width: 768px) {
