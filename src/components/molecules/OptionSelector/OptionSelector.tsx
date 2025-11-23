@@ -23,10 +23,10 @@ export default function OptionSelector({
       to={ruta ? ruta : ""}
       onClick={onClick}
     >
-      <div className={styles.optionIcon}>
+      <div className={styles.first}>
         <SimpleIcon icon={icono} fontSize={20} />
+        {descripcion}
       </div>
-      <div className={styles.optionDescription}>{descripcion}</div>
       <div className={styles.optionArrow}>
         <SimpleIcon icon={LINK_EXTERNAL} fontSize={25} />
       </div>
