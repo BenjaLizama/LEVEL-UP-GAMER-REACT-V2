@@ -1,3 +1,4 @@
+import { cerrarSesion } from "@/utils/Funciones";
 import {
   BILL,
   CARD,
@@ -6,8 +7,8 @@ import {
   HEART,
   KEY,
   LANGUAGE,
+  LOGOUT,
   POINT,
-  SETTINGS,
   SUPPORT,
   WALLET,
 } from "@/utils/Icons";
@@ -106,10 +107,10 @@ export const ConfiguracionGeneral = [
         onClick: () => console.log("Navegar a selección de Idioma"),
       },
       {
-        id: "configuracion-general",
-        icono: SETTINGS,
-        descripcion: "Configuración General",
-        onClick: () => console.log("Navegar a Configuración Avanzada"),
+        id: "cerrar-sesion",
+        icono: LOGOUT,
+        descripcion: "Cerrar sesión",
+        onClick: () => cerrarSesion(),
       },
     ],
   },
