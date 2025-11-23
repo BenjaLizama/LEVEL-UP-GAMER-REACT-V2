@@ -1,0 +1,23 @@
+@media (min-width: 1024px) {
+  .container {
+    justify-self: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 1024px;
+    column-gap: 2rem;
+    row-gap: 1rem;
+  }
+
+  .main {
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 3rem;
+    background-color: #25252545;
+    border-radius: 1rem;
+    padding: 1.5rem 2rem;
+    max-width: 1100px;
+  }
+}
