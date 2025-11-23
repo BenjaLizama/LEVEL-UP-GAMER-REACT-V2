@@ -1,9 +1,9 @@
 .container {
-  margin-top: 10rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 6rem 2rem;
 }
 
 .bienvenido {
