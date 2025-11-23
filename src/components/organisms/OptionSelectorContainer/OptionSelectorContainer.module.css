@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    font-size: 1.4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    font-size: 1.6rem;
+  }
+}
