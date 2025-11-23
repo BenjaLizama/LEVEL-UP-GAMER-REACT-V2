@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import DateSelector from "./DateSelector";
 
-// Mockear el módulo de estilos CSS (si no usas moduleNameMapper)
 jest.mock("./DateSelector.module.css", () => ({
   wrapper: "mocked-wrapper",
   label: "mocked-label",
@@ -18,7 +17,6 @@ const defaultProps = {
 };
 
 describe("DateSelector", () => {
-  // Test 1: Renderizado básico y valor inicial
   test("debería renderizar el input con el valor inicial proporcionado", () => {
     render(<DateSelector {...defaultProps} />);
     const dateInput = screen.getByDisplayValue(defaultProps.value);
@@ -26,7 +24,6 @@ describe("DateSelector", () => {
     expect(dateInput).toHaveAttribute("type", "date");
   });
 
-  // Test 2: Verifica la etiqueta (label) y accesibilidad
   test("debería renderizar el label si se proporciona, y estar correctamente asociado al input", () => {
     const testLabel = "Fecha de Nacimiento";
     render(<DateSelector {...defaultProps} label={testLabel} />);
@@ -38,7 +35,6 @@ describe("DateSelector", () => {
     expect(inputByLabel).toBeInTheDocument();
   });
 
-  // Test 3: Simulación de cambio de valor
   test("debería llamar a 'onValueChange' con el nuevo valor cuando el usuario cambia el input", () => {
     defaultProps.onValueChange.mockClear();
     render(<DateSelector {...defaultProps} />);
@@ -52,7 +48,6 @@ describe("DateSelector", () => {
     expect(defaultProps.onValueChange).toHaveBeenCalledWith(newDate);
   });
 
-  // Test 4: Renderizado del mensaje de error
   test("debería mostrar el mensaje de error si se proporciona 'errorMessage'", () => {
     const errorText = "La fecha no puede ser en el futuro";
     render(<DateSelector {...defaultProps} errorMessage={errorText} />);
@@ -61,14 +56,10 @@ describe("DateSelector", () => {
     expect(errorMessageElement).toBeInTheDocument();
   });
 
-  // Test 5: Manejo del placeholder de error (sin mensaje)
   test("debería mostrar el span de error, pero sin texto visible, si errorMessage es undefined", () => {
     render(<DateSelector {...defaultProps} errorMessage={undefined} />);
 
-    // 💡 CORRECCIÓN TS: Usamos ?? "" para asegurar que el retorno sea un boolean.
-    // Buscamos el elemento que tiene la clase de error y cuyo contenido es solo espacio o vacío.
     const errorSpan = screen.getByText((content, element) => {
-      // Obtenemos la className de forma segura, usando "" si element es null
       const elementClassName = element?.className ?? "";
 
       const isErrorMessageSpan = elementClassName.includes(
@@ -76,14 +67,12 @@ describe("DateSelector", () => {
       );
       const contentIsBlank = content.trim() === "";
 
-      // Retorna un boolean estricto
       return isErrorMessageSpan && contentIsBlank;
     });
 
     expect(errorSpan).toBeInTheDocument();
   });
 
-  // Test 6: Propagación de props nativas
   test("debería propagar props nativas al elemento input (e.g., 'min')", () => {
     render(
       <DateSelector
