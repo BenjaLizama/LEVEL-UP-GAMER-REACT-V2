@@ -1,0 +1,30 @@
+.container {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 0.2rem;
+}
+
+.imagen {
+  height: 100px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid var(--color-acento);
+  transition: all 0.2s ease;
+}
+
+.imagen:hover {
+  border: 3px solid var(--color-acento-hover);
+}
+
+.nombreContainer {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.correoContainer {
+  font-size: 1.2rem;
+  color: var(--color-fuente-secundario);
+}
