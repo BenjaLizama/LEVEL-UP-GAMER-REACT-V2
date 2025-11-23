@@ -88,7 +88,7 @@ export default function Login() {
       console.error("Error en la API durante el login: ", error);
 
       if (axios.isAxiosError(error) && error.response) {
-        if (error.response.status === 401) {
+        if (error.response.status === 404) {
           setApiError(
             "Correo o contraseña incorrectos. Por favor, inténtalo de nuevo."
           );

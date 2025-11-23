@@ -1,3 +1,12 @@
+import LoginProfileInfo from "@/components/molecules/LoginProfileInfo/LoginProfileInfo";
+
 export default function Profile() {
-  return <div>Profile</div>;
+  const idUsuario = localStorage.getItem("idUsuario");
+
+  return (
+    <div>
+      {!idUsuario && <LoginProfileInfo />}
+      <hr />
+    </div>
+  );
 }
