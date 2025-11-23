@@ -4,10 +4,12 @@
   grid-template-columns: 1fr 1fr 9fr;
   justify-content: space-between;
   align-items: center;
-  padding: 0.3rem 0.2rem;
+  padding: 0.5rem 0.2rem;
   border-radius: 0.4rem;
-  background-color: rgba(9, 51, 123, 0.364);
   transition: all 0.3s ease;
+  background-color: #39393945;
+  box-shadow: var(--sombra) inset;
+  color: var(--color-fuente-principal);
 }
 
 .optionSelectorContainer:hover {
