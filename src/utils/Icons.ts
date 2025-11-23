@@ -8,6 +8,16 @@ const EMAIL = "dashicons:email";
 const KEY = "mdi:key";
 const USER = "gridicons:user";
 const ARROW = "material-symbols:arrow-drop-down-rounded";
+const HEART = "majesticons:heart";
+const GAMEPAD = "fa6-solid:gamepad";
+const BILL = "icon-park-solid:bill";
+const GIFT = "fa6-solid:gift";
+const WALLET = "famicons:wallet";
+const POINT = "cryptocurrency:xp";
+const CARD = "fa7-solid:id-card";
+const SUPPORT = "tabler:help-triangle-filled";
+const LANGUAGE = "material-symbols:language";
+const SETTINGS = "zmdi:settings";
 
 export {
   HOME,
@@ -20,4 +30,14 @@ export {
   KEY,
   USER,
   ARROW,
+  HEART,
+  GAMEPAD,
+  BILL,
+  GIFT,
+  WALLET,
+  POINT,
+  CARD,
+  SUPPORT,
+  LANGUAGE,
+  SETTINGS,
 };
