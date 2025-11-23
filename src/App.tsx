@@ -2,18 +2,18 @@ import "@/styles/global.css";
 import { useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
-import Home from "@/components/pages/Home/Home";
-import Store from "@/components/pages/Store/Store";
-import Cart from "@/components/pages/Cart/Cart";
-import Profile from "@/components/pages/Profile/Profile";
+import Home from "./pages/Home/Home";
+import Store from "./pages/Store/Store";
+import Cart from "./pages/Cart/Cart";
+import Profile from "./pages/Profile/Profile";
 
 import NavBar from "@/components/organisms/NavBar/NavBar";
 import FullScreenMenu, {
   NavItem,
 } from "@/components/organisms/FullScreenMenu/FullScreenMenu";
-import Test from "./components/pages/Test";
-import Login from "./components/pages/Login/Login";
-import Signup from "./components/pages/SignUp/Signup";
+import Test from "./pages/Test";
+import Login from "./pages/Login/Login";
+import Signup from "./pages/SignUp/Signup";
 
 export default function App() {
   const [modoClaro, setModoClaro] = useState(false);
