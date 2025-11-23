@@ -5,3 +5,7 @@ export function formatearACLP(precio: number) {
     minimumFractionDigits: 0,
   }).format(precio);
 }
+
+export function cerrarSesion() {
+  localStorage.clear();
+}

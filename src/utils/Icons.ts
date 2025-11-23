@@ -18,6 +18,7 @@ const CARD = "fa7-solid:id-card";
 const SUPPORT = "tabler:help-triangle-filled";
 const LANGUAGE = "material-symbols:language";
 const SETTINGS = "zmdi:settings";
+const LOGOUT = "tabler:logout";
 
 export {
   HOME,
@@ -40,4 +41,5 @@ export {
   SUPPORT,
   LANGUAGE,
   SETTINGS,
+  LOGOUT,
 };
