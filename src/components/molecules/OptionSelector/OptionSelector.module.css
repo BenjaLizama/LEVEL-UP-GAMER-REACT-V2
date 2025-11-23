@@ -1,0 +1,41 @@
+.optionSelectorContainer {
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr 1fr 9fr;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0.2rem;
+  border-radius: 0.4rem;
+  background-color: rgba(9, 51, 123, 0.364);
+  transition: all 0.3s ease;
+}
+
+.optionSelectorContainer:hover {
+  color: var(--color-texto-blanco);
+  background-color: var(--color-acento);
+}
+
+.optionIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.optionDescription {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.optionArrow {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding-right: 0.3rem;
+}
+
+.optionSelectorContainerChildren {
+  display: flex;
+  flex-direction: column;
+  padding: 0.3rem 0.2rem;
+}
