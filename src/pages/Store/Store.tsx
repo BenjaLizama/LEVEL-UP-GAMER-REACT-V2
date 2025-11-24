@@ -28,8 +28,18 @@ export default function Store() {
         if (categoriaSeleccionada === "") {
           data = await productoService.getAllProducts();
         } else {
+          const categoriaObjeto = CATEGORIAS_POR_DEFECTO.find(
+            (cat) => String(cat.id) === categoriaSeleccionada
+          );
+
+          const categoriaAEnviar = categoriaObjeto
+            ? categoriaObjeto.value
+            : categoriaSeleccionada;
+
+          const categoriaNormalizada = categoriaAEnviar.toUpperCase();
+
           data = await productoService.filtrarProductosPorCategoria(
-            categoriaSeleccionada
+            categoriaNormalizada
           );
         }
 
@@ -63,23 +73,21 @@ export default function Store() {
   if (isLoading) {
     return (
       <div style={{ textAlign: "center", marginTop: "50px" }}>
-        {" "}
         <div className={styles.searchContainer}>
-          {/* Props restauradas y deshabilitado durante la carga */}{" "}
           <Input
             icon={SEARCH}
             value={searchTerm}
             onValueChange={handleSearchChange}
             placeholder="Buscando..."
             disabled
-          />{" "}
+          />
           <CategoryFilter
             categorias={CATEGORIAS_POR_DEFECTO}
             categoriaSeleccionada={categoriaSeleccionada}
             onCategoriaChange={setCategoriaSeleccionada}
-          />{" "}
+          />
         </div>
-        Cargando catálogo...{" "}
+        Cargando catálogo...
       </div>
     );
   }
@@ -87,45 +95,41 @@ export default function Store() {
   if (error) {
     return (
       <div style={{ color: "red", textAlign: "center", marginTop: "50px" }}>
-        {" "}
         <div className={styles.searchContainer}>
-          {/* Props restauradas y deshabilitado durante el error */}{" "}
           <Input
             icon={SEARCH}
             value={searchTerm}
             onValueChange={handleSearchChange}
             placeholder="Buscar por nombre..."
             disabled
-          />{" "}
+          />
           <CategoryFilter
             categorias={CATEGORIAS_POR_DEFECTO}
             categoriaSeleccionada={categoriaSeleccionada}
             onCategoriaChange={setCategoriaSeleccionada}
-          />{" "}
+          />
         </div>
-        {error}{" "}
+        {error}
       </div>
     );
   }
 
   return (
     <main>
-      {" "}
       <div className={styles.searchContainer}>
-        {/* Props restauradas y HABILITADO para la interacción */}{" "}
         <Input
           icon={SEARCH}
           value={searchTerm}
           onValueChange={handleSearchChange}
           placeholder="Buscar por nombre..."
-        />{" "}
+        />
         <CategoryFilter
           categorias={CATEGORIAS_POR_DEFECTO}
           categoriaSeleccionada={categoriaSeleccionada}
           onCategoriaChange={setCategoriaSeleccionada}
-        />{" "}
+        />
       </div>
-      <ProductGrid productos={productosFiltrados} />{" "}
+      <ProductGrid productos={productosFiltrados} />
     </main>
   );
 }
