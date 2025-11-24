@@ -9,6 +9,10 @@
 
 .imagen {
   height: 100px;
+  width: 100px;
+  image-rendering: optimizeSpeed;
+  object-fit: cover;
+  object-position: center;
   border-radius: 50%;
   cursor: pointer;
   border: 3px solid var(--color-acento);
