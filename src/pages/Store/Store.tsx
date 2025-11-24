@@ -5,8 +5,8 @@ import { productoService } from "@/services/ProductoService";
 import ProductGrid from "@/components/organisms/ProductGrid/ProductGrid";
 import CategoryFilter from "@/components/molecules/CategoryFilter/CategoryFilter";
 import { CATEGORIAS_POR_DEFECTO } from "@/models/Categoria";
-import SimpleInput from "@/components/atoms/SimpleInput/SimpleInput";
-import { InputType } from "@/components/atoms/SimpleInput/SimpleInput.types";
+import Input from "@/components/atoms/Input/Input";
+import { SEARCH } from "@/utils/Icons";
 
 export default function Store() {
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -46,8 +46,8 @@ export default function Store() {
     fetchProductosActualizados();
   }, [categoriaSeleccionada]);
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
   };
 
   const productosFiltrados = useMemo(() => {
@@ -63,21 +63,23 @@ export default function Store() {
   if (isLoading) {
     return (
       <div style={{ textAlign: "center", marginTop: "50px" }}>
+        {" "}
         <div className={styles.searchContainer}>
-          <SimpleInput
-            type={InputType.Search}
+          {/* Props restauradas y deshabilitado durante la carga */}{" "}
+          <Input
+            icon={SEARCH}
             value={searchTerm}
-            onChange={handleSearchChange}
-            placeholder="Buscar por nombre..."
+            onValueChange={handleSearchChange}
+            placeholder="Buscando..."
             disabled
-          />
+          />{" "}
           <CategoryFilter
             categorias={CATEGORIAS_POR_DEFECTO}
             categoriaSeleccionada={categoriaSeleccionada}
             onCategoriaChange={setCategoriaSeleccionada}
-          />
+          />{" "}
         </div>
-        Cargando catálogo...
+        Cargando catálogo...{" "}
       </div>
     );
   }
@@ -85,41 +87,45 @@ export default function Store() {
   if (error) {
     return (
       <div style={{ color: "red", textAlign: "center", marginTop: "50px" }}>
+        {" "}
         <div className={styles.searchContainer}>
-          <SimpleInput
-            type={InputType.Search}
+          {/* Props restauradas y deshabilitado durante el error */}{" "}
+          <Input
+            icon={SEARCH}
             value={searchTerm}
-            onChange={handleSearchChange}
+            onValueChange={handleSearchChange}
             placeholder="Buscar por nombre..."
-          />
+            disabled
+          />{" "}
           <CategoryFilter
             categorias={CATEGORIAS_POR_DEFECTO}
             categoriaSeleccionada={categoriaSeleccionada}
             onCategoriaChange={setCategoriaSeleccionada}
-          />
+          />{" "}
         </div>
-        {error}
+        {error}{" "}
       </div>
     );
   }
 
   return (
     <main>
+      {" "}
       <div className={styles.searchContainer}>
-        <SimpleInput
-          className={styles.simpleInput}
-          type={InputType.Search}
+        {/* Props restauradas y HABILITADO para la interacción */}{" "}
+        <Input
+          icon={SEARCH}
           value={searchTerm}
-          onChange={handleSearchChange}
+          onValueChange={handleSearchChange}
           placeholder="Buscar por nombre..."
-        />
+        />{" "}
         <CategoryFilter
           categorias={CATEGORIAS_POR_DEFECTO}
           categoriaSeleccionada={categoriaSeleccionada}
           onCategoriaChange={setCategoriaSeleccionada}
-        />
+        />{" "}
       </div>
-      <ProductGrid productos={productosFiltrados} />
+      <ProductGrid productos={productosFiltrados} />{" "}
     </main>
   );
 }
