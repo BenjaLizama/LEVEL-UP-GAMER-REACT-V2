@@ -83,6 +83,25 @@ export default function Login() {
         localStorage.setItem("idUsuario", String(usuarioLogeado.idUsuario));
       }
 
+      if (usuarioLogeado.nombre) {
+        localStorage.setItem("nombre", String(usuarioLogeado.nombre));
+      }
+
+      if (usuarioLogeado.apellido) {
+        localStorage.setItem("apellido", String(usuarioLogeado.apellido));
+      }
+
+      if (usuarioLogeado.correo) {
+        localStorage.setItem("correo", String(usuarioLogeado.correo));
+      }
+
+      if (usuarioLogeado.imagenPerfilURL) {
+        localStorage.setItem(
+          "imagenPerfil",
+          String(usuarioLogeado.imagenPerfilURL)
+        );
+      }
+
       navigate("/");
     } catch (error: unknown) {
       console.error("Error en la API durante el login: ", error);

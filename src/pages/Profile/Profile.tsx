@@ -4,6 +4,7 @@ import LoginProfileInfo from "@/components/molecules/LoginProfileInfo/LoginProfi
 import OptionSelector from "@/components/molecules/OptionSelector/OptionSelector";
 import OptionSelectorContainer from "@/components/organisms/OptionSelectorContainer/OptionSelectorContainer";
 import { ConfiguracionGeneral } from "@/constants/configOptions";
+import UserProfileInfo from "@/components/molecules/UserProfileInfo/UserProfileInfo";
 
 export default function Profile() {
   const idUsuario = localStorage.getItem("idUsuario");
@@ -13,6 +14,12 @@ export default function Profile() {
       {!idUsuario && <LoginProfileInfo />}
       {idUsuario && (
         <div className={styles.container}>
+          <UserProfileInfo
+            nombre={localStorage.getItem("nombre") || ""}
+            apellido={localStorage.getItem("apellido") || ""}
+            correo={localStorage.getItem("correo") || ""}
+            imagenURL={localStorage.getItem("imagenPerfil") || ""}
+          />
           {ConfiguracionGeneral.map((organismo) => (
             <React.Fragment key={organismo.organismoId}>
               <OptionSelectorContainer descripcion={organismo.titulo}>
