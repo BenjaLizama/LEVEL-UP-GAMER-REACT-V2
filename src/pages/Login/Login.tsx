@@ -65,6 +65,8 @@ export default function Login() {
 
     setIsLoading(true);
 
+    localStorage.clear();
+
     const credenciales: LoginDTO = {
       correo: email,
       contrasena: pass,

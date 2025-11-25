@@ -138,6 +138,8 @@ export default function Signup() {
 
     setIsLoading(true);
 
+    localStorage.clear();
+
     const nuevoUsuario: SignupDTO = {
       nombreUsuario: nombreUsuario,
       nombre: nombre,

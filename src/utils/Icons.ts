@@ -21,6 +21,7 @@ const SETTINGS = "zmdi:settings";
 const LOGOUT = "tabler:logout";
 const LINK = "ri:link";
 const SEARCH = "icomoon-free:search";
+const NO_PRODUCTS = "fluent:box-dismiss-20-filled";
 
 export {
   HOME,
@@ -46,4 +47,5 @@ export {
   LOGOUT,
   LINK,
   SEARCH,
+  NO_PRODUCTS,
 };
