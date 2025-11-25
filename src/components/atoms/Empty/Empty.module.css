@@ -18,6 +18,11 @@
 
   padding: 1rem 3rem 3rem 3rem;
 }
+
 .contPrincipal p {
   font-size: 2rem;
+}
+
+.emptyDescipcion {
+  text-align: center;
 }

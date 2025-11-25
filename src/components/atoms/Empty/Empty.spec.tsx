@@ -2,25 +2,46 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Empty from "./Empty";
+import SimpleIcon from "../SimpleIcon/SimpleIcon";
 
-jest.mock("../EmptyCart/Empty.module.css", () => ({
+jest.mock("../SimpleIcon/SimpleIcon", () => ({
+  __esModule: true,
+  default: jest.fn(({ icon }) => <div data-testid={`icon-${icon}`} />),
+}));
+
+jest.mock("./Empty.module.css", () => ({
   contenedor: "contenedor",
   contenido: "contenido",
   contPrincipal: "contPrincipal",
+  emptyDescipcion: "empty-descripcion",
 }));
 
 describe("componente Empty", () => {
   const defaultProps = {
     descripcion: "No se encontraron resultados.",
-    icono: <span data-testid="mock-icon">🛒</span>,
+    icono: "mock-icon",
   };
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   it("renderiza correctamente con la descripcion y el icono", () => {
     render(<Empty {...defaultProps} />);
 
     expect(screen.getByText(defaultProps.descripcion)).toBeInTheDocument();
 
-    expect(screen.getByTestId("mock-icon")).toBeInTheDocument();
+    expect(
+      screen.getByTestId(`icon-${defaultProps.icono}`)
+    ).toBeInTheDocument();
+
+    expect(SimpleIcon).toHaveBeenCalledWith(
+      expect.objectContaining({
+        icon: defaultProps.icono,
+        fontSize: 110,
+      }),
+      {}
+    );
   });
 
   it("renderiza children si se proporciona", () => {
@@ -35,15 +56,14 @@ describe("componente Empty", () => {
   });
 
   it("renderiza correctamente cuando no se proporciona contenido hijo", () => {
-    const { container } = render(
-      <Empty {...defaultProps} children={undefined} />
-    );
+    render(<Empty {...defaultProps} children={undefined} />);
 
     expect(screen.getByText(defaultProps.descripcion)).toBeInTheDocument();
-    expect(screen.getByTestId("mock-icon")).toBeInTheDocument();
+    expect(
+      screen.getByTestId(`icon-${defaultProps.icono}`)
+    ).toBeInTheDocument();
 
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
-    expect(container.textContent).not.toContain("Botón de Acción");
   });
 
   it("aplica las clases CSS correctas", () => {
@@ -51,11 +71,11 @@ describe("componente Empty", () => {
 
     expect(container.firstChild).toHaveClass("contenedor");
 
-    const contenidoDiv = container.querySelector(".contenido");
+    const contenidoDiv = container.querySelector(`.${"contenido"}`);
     expect(contenidoDiv).toBeInTheDocument();
     expect(contenidoDiv).toHaveClass("contenido");
 
-    const contPrincipalDiv = container.querySelector(".contPrincipal");
+    const contPrincipalDiv = container.querySelector(`.${"contPrincipal"}`);
     expect(contPrincipalDiv).toBeInTheDocument();
     expect(contPrincipalDiv).toHaveClass("contPrincipal");
   });
