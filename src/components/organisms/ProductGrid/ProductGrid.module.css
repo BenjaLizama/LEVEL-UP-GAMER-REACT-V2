@@ -4,6 +4,14 @@
   padding-bottom: 4rem;
 }
 
+.noProductContainer {
+  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 @media (min-width: 768px) {
   .gridContainer {
     grid-template-columns: 1fr 1fr;
