@@ -3,7 +3,20 @@ import axios from "axios";
 import { Usuario } from "@/models/Usuario";
 import { LoginDTO } from "@/models/dto/LoginDTO";
 
-const API_URL = "http://localhost:8083/api/usuarios";
+const API_BASE_URL = "http://localhost:8083";
+const API_URL = `${API_BASE_URL}/api/usuarios`;
+
+const buildAbsoluteImageUrl = (relativePath: string): string => {
+  if (!relativePath) {
+    return "";
+  }
+
+  const normalizedPath = relativePath.startsWith("/")
+    ? relativePath.substring(1)
+    : relativePath;
+
+  return `${API_BASE_URL}/${normalizedPath}`;
+};
 
 export const usuarioService = {
   login: async (credenciales: LoginDTO): Promise<Usuario> => {
@@ -13,7 +26,15 @@ export const usuarioService = {
         credenciales
       );
 
-      return response.data;
+      const usuario: Usuario = response.data;
+
+      if (usuario.imagenPerfilURL) {
+        const absoluteUrl = buildAbsoluteImageUrl(usuario.imagenPerfilURL);
+
+        usuario.imagenPerfilURL = absoluteUrl;
+      }
+
+      return usuario;
     } catch (error) {
       console.error("Error al acceder: ", error);
       throw error;
@@ -26,7 +47,13 @@ export const usuarioService = {
     try {
       const response = await axios.post<Usuario>(SIGNUP_URL, informacion);
 
-      return response.data;
+      const usuario: Usuario = response.data;
+      if (usuario.imagenPerfilURL) {
+        usuario.imagenPerfilURL = buildAbsoluteImageUrl(
+          usuario.imagenPerfilURL
+        );
+      }
+      return usuario;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const status = error.response.status;

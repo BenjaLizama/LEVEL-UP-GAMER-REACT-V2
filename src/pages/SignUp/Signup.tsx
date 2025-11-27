@@ -158,6 +158,25 @@ export default function Signup() {
         localStorage.setItem("idUsuario", String(usuarioGuardado.idUsuario));
       }
 
+      if (usuarioGuardado.nombre) {
+        localStorage.setItem("nombre", String(usuarioGuardado.nombre));
+      }
+
+      if (usuarioGuardado.apellido) {
+        localStorage.setItem("apellido", String(usuarioGuardado.apellido));
+      }
+
+      if (usuarioGuardado.correo) {
+        localStorage.setItem("correo", String(usuarioGuardado.correo));
+      }
+
+      if (usuarioGuardado.imagenPerfilURL) {
+        localStorage.setItem(
+          "imagenPerfil",
+          String(usuarioGuardado.imagenPerfilURL)
+        );
+      }
+
       alert(`¡Registro exitoso! Usuario: ${usuarioGuardado.nombre}`);
       navigate("/");
     } catch (error: unknown) {

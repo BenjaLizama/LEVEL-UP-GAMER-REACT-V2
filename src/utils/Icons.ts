@@ -19,6 +19,8 @@ const SUPPORT = "tabler:help-triangle-filled";
 const LANGUAGE = "material-symbols:language";
 const SETTINGS = "zmdi:settings";
 const LOGOUT = "tabler:logout";
+const LINK = "ri:link";
+const SEARCH = "icomoon-free:search";
 
 export {
   HOME,
@@ -42,4 +44,6 @@ export {
   LANGUAGE,
   SETTINGS,
   LOGOUT,
+  LINK,
+  SEARCH,
 };

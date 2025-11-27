@@ -12,7 +12,7 @@ export default function Button(props: Props) {
 
   return (
     <button
-      className={styles.button}
+      className={`${styles.button} ${disabled ? styles.disabled : ""}`}
       onClick={onClick}
       type={type}
       disabled={disabled}

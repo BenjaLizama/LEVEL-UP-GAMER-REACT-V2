@@ -5,8 +5,8 @@ import { productoService } from "@/services/ProductoService";
 import ProductGrid from "@/components/organisms/ProductGrid/ProductGrid";
 import CategoryFilter from "@/components/molecules/CategoryFilter/CategoryFilter";
 import { CATEGORIAS_POR_DEFECTO } from "@/models/Categoria";
-import SimpleInput from "@/components/atoms/SimpleInput/SimpleInput";
-import { InputType } from "@/components/atoms/SimpleInput/SimpleInput.types";
+import Input from "@/components/atoms/Input/Input";
+import { SEARCH } from "@/utils/Icons";
 
 export default function Store() {
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -28,8 +28,18 @@ export default function Store() {
         if (categoriaSeleccionada === "") {
           data = await productoService.getAllProducts();
         } else {
+          const categoriaObjeto = CATEGORIAS_POR_DEFECTO.find(
+            (cat) => String(cat.id) === categoriaSeleccionada
+          );
+
+          const categoriaAEnviar = categoriaObjeto
+            ? categoriaObjeto.value
+            : categoriaSeleccionada;
+
+          const categoriaNormalizada = categoriaAEnviar.toUpperCase();
+
           data = await productoService.filtrarProductosPorCategoria(
-            categoriaSeleccionada
+            categoriaNormalizada
           );
         }
 
@@ -46,8 +56,8 @@ export default function Store() {
     fetchProductosActualizados();
   }, [categoriaSeleccionada]);
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
   };
 
   const productosFiltrados = useMemo(() => {
@@ -64,11 +74,11 @@ export default function Store() {
     return (
       <div style={{ textAlign: "center", marginTop: "50px" }}>
         <div className={styles.searchContainer}>
-          <SimpleInput
-            type={InputType.Search}
+          <Input
+            icon={SEARCH}
             value={searchTerm}
-            onChange={handleSearchChange}
-            placeholder="Buscar por nombre..."
+            onValueChange={handleSearchChange}
+            placeholder="Buscando..."
             disabled
           />
           <CategoryFilter
@@ -86,11 +96,12 @@ export default function Store() {
     return (
       <div style={{ color: "red", textAlign: "center", marginTop: "50px" }}>
         <div className={styles.searchContainer}>
-          <SimpleInput
-            type={InputType.Search}
+          <Input
+            icon={SEARCH}
             value={searchTerm}
-            onChange={handleSearchChange}
+            onValueChange={handleSearchChange}
             placeholder="Buscar por nombre..."
+            disabled
           />
           <CategoryFilter
             categorias={CATEGORIAS_POR_DEFECTO}
@@ -106,11 +117,10 @@ export default function Store() {
   return (
     <main>
       <div className={styles.searchContainer}>
-        <SimpleInput
-          className={styles.simpleInput}
-          type={InputType.Search}
+        <Input
+          icon={SEARCH}
           value={searchTerm}
-          onChange={handleSearchChange}
+          onValueChange={handleSearchChange}
           placeholder="Buscar por nombre..."
         />
         <CategoryFilter
