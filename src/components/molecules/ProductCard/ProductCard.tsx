@@ -67,9 +67,11 @@ export default function ProductCard(props: ProductCardProps) {
           <span className={styles.addButtonCartSpan}>+1</span>
         </button>
         {/* Botón diseño escritorio */}
-        <Link to={"/"} className={styles.btnAddCartDesktop}>
-          <Button onClick={() => handleAddCardBtn}>Agregar al carrito</Button>
-        </Link>
+        <div className={styles.btnAddCartDesktop}>
+          <Button onClick={(e: any) => handleAddCardBtn(e)}>
+            Agregar al carrito
+          </Button>
+        </div>
       </div>
     </div>
   );

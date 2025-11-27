@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./ProductGrid.module.css";
 import { Producto } from "@/models/Producto";
 import ProductCard from "@/components/molecules/ProductCard/ProductCard";
+import { carritoService } from "@/services/CarritoService";
 
 interface ProductoGridProps {
   productos: Producto[];
@@ -26,7 +27,9 @@ export default function ProductGrid({
         <ProductCard
           key={producto.codigoProducto}
           {...producto}
-          onAddCart={onAddCart}
+          onAddCart={() =>
+            carritoService.addItemToCart(producto.codigoProducto, 1)
+          }
         />
       ))}
     </div>

@@ -1,0 +1,29 @@
+.contenedor {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.contenido {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2rem 5rem 5rem 10rem;
+}
+
+.button {
+  max-width: 100%;
+  user-select: none;
+  cursor: pointer;
+  outline: none;
+  border: none;
+
+  font-family: var(--fuente-principal);
+
+  background-color: var(--color-acento);
+  color: var(--color-texto-blanco);
+
+  padding: 0.5rem;
+  border-radius: 0.35rem;
+}

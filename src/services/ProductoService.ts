@@ -7,6 +7,7 @@ export const productoService = {
   getAllProducts: async (): Promise<Producto[]> => {
     try {
       const response = await axios.get<Producto[]>(`${API_URL}`);
+
       if (response.status === 204) {
         return [];
       }
