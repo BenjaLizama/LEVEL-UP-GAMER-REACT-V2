@@ -5,7 +5,7 @@ import no_image from "@/assets/images/defaultImages/no-product-image.png";
 import { formatearACLP } from "@/utils/Funciones";
 import SimpleIcon from "@/components/atoms/SimpleIcon/SimpleIcon";
 import { ADD_CART } from "@/utils/Icons";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "@/components/atoms/Button/Button";
 
 interface ProductCardProps extends Producto {
@@ -67,9 +67,15 @@ export default function ProductCard(props: ProductCardProps) {
           <span className={styles.addButtonCartSpan}>+1</span>
         </button>
         {/* Botón diseño escritorio */}
-        <Link to={"/"} className={styles.btnAddCartDesktop}>
-          <Button onClick={() => handleAddCardBtn}>Agregar al carrito</Button>
-        </Link>
+        <div className={styles.btnAddCartDesktop}>
+          <Button
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+              handleAddCardBtn(e)
+            }
+          >
+            Agregar al carrito
+          </Button>
+        </div>
       </div>
     </div>
   );
