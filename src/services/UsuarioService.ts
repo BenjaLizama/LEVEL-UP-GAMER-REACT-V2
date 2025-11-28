@@ -3,7 +3,7 @@ import axios from "axios";
 import { Usuario } from "@/models/Usuario";
 import { LoginDTO } from "@/models/dto/LoginDTO";
 
-const API_BASE_URL = "http://localhost:8083";
+const API_BASE_URL = "http://54.85.135.89:8084";
 const API_URL = `${API_BASE_URL}/api/usuarios`;
 
 const buildAbsoluteImageUrl = (relativePath: string): string => {

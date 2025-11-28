@@ -6,7 +6,7 @@ export class CarritoService {
   private cartItems: ItemCarrito[] = [];
   private total: number = 0;
   private subscribers: Function[] = [];
-  private apiUrl = "http://localhost:8081/api/carritos";
+  private apiUrl = "http://54.85.135.89:8083/api/carritos";
 
   private getUserId(): number {
     const idStored = localStorage.getItem("idUsuario");
