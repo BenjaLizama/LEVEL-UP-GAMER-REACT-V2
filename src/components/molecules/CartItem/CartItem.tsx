@@ -13,16 +13,17 @@ interface PlantillaProps {
 export default function CartItem(props: PlantillaProps) {
   return (
     <div className={styles.contenido}>
-      <div className={styles.item}>
+      <div className={styles.itemContainer}>
         <div className={styles.contenedorImg}>
           <img
             className={styles.imagen}
             src={props.imagen}
             alt={props.nombre}
+            draggable={false}
           />
         </div>
         <div className={styles.info}>
-          <h5 className={styles.nombreProd}>{props.nombre}</h5>
+          <p className={styles.nombreProd}>{props.nombre}</p>
           <p>precio: ${props.precio}</p>
           <p>cantidad: {props.cantidad}</p>
         </div>

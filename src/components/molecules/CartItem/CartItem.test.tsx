@@ -1,10 +1,11 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import CartItem from "./CartItem";
 
 jest.mock("./CartItem.module.css", () => ({
   contenido: "mocked-contenido",
-  item: "mocked-item",
+  itemContainer: "mocked-itemContainer",
   contenedorImg: "mocked-contenedorImg",
   imagen: "mocked-imagen",
   info: "mocked-info",
@@ -21,23 +22,19 @@ const baseProps = {
 };
 
 describe("CartItem", () => {
-  test("debería renderizar el nombre, precio y cantidad del producto correctamente", () => {
+  test("debe renderizar el nombre, precio y cantidad del producto correctamente", () => {
     render(<CartItem {...baseProps} />);
 
-    expect(
-      screen.getByRole("heading", { level: 5, name: baseProps.nombre })
-    ).toBeInTheDocument();
+    expect(screen.getByText(baseProps.nombre)).toBeInTheDocument();
 
-    expect(
-      screen.getByText(`precio: $${baseProps.precio}`)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/precio: \$45.99/i)).toBeInTheDocument();
 
     expect(
       screen.getByText(`cantidad: ${baseProps.cantidad}`)
     ).toBeInTheDocument();
   });
 
-  test("debería renderizar la imagen con la URL y el texto alternativo (alt) correctos", () => {
+  test("debe renderizar la imagen con la URL y el texto alternativo (alt) correctos", () => {
     render(<CartItem {...baseProps} />);
 
     const itemImage = screen.getByAltText(baseProps.nombre);
@@ -49,22 +46,22 @@ describe("CartItem", () => {
     expect(itemImage).toHaveClass("mocked-imagen");
   });
 
-  test("debería renderizar contenido anidado (children) dentro del contenedor de control", () => {
-    const mockChildContent = "Controles de ajuste";
+  test("debe renderizar el contenido anidado (children)", () => {
+    const mockChildContent = "Botones de control de cantidad";
 
     render(
       <CartItem {...baseProps}>
-        <button>{mockChildContent}</button>
+        <button data-testid="child-button">{mockChildContent}</button>
       </CartItem>
     );
 
-    const childElement = screen.getByRole("button", { name: mockChildContent });
+    const childElement = screen.getByText(mockChildContent);
     expect(childElement).toBeInTheDocument();
 
     expect(childElement.closest("div")).toHaveClass("mocked-child");
   });
 
-  test("debería renderizar correctamente si no se proporciona children", () => {
+  test("debe renderizar correctamente si no se proporciona children", () => {
     const { container } = render(
       <CartItem {...baseProps} children={undefined} />
     );
@@ -72,20 +69,26 @@ describe("CartItem", () => {
     expect(screen.getByText(baseProps.nombre)).toBeInTheDocument();
 
     const childDiv = container.querySelector(".mocked-child");
+    expect(childDiv).toBeInTheDocument();
     expect(childDiv).toBeEmptyDOMElement();
   });
 
-  test("debería aplicar las clases CSS mockeadas a los contenedores principales", () => {
+  test("debe aplicar las clases CSS mockeadas a los contenedores principales", () => {
     const { container } = render(<CartItem {...baseProps} />);
 
     expect(container.firstChild).toHaveClass("mocked-contenido");
 
-    const itemDiv = screen.getByText(baseProps.nombre).closest(".mocked-item");
-    expect(itemDiv).toBeInTheDocument();
+    const imageContainer = screen
+      .getByAltText(baseProps.nombre)
+      .closest(".mocked-contenedorImg");
+    expect(imageContainer).toBeInTheDocument();
 
     const infoDiv = screen
       .getByText(`precio: $${baseProps.precio}`)
       .closest(".mocked-info");
     expect(infoDiv).toBeInTheDocument();
+
+    const itemContainer = imageContainer?.closest(".mocked-itemContainer");
+    expect(itemContainer).toBeInTheDocument();
   });
 });
