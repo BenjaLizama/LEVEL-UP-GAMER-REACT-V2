@@ -11,7 +11,7 @@ import NavBar from "@/components/organisms/NavBar/NavBar";
 import FullScreenMenu, {
   NavItem,
 } from "@/components/organisms/FullScreenMenu/FullScreenMenu";
-import Test from "./pages/Test";
+// import Test from "./pages/Test";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/SignUp/Signup";
 
@@ -65,7 +65,7 @@ export default function App() {
           <Route path="/register" element={<Signup />} />
 
           {/* Esto debe ser eliminado en la version final */}
-          <Route path="/test" element={<Test />} />
+          {/* <Route path="/test" element={<Test />} /> */}
         </Routes>
       </main>
     </div>
