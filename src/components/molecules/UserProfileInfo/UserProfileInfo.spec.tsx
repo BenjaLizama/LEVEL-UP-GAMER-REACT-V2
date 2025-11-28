@@ -8,7 +8,7 @@ jest.mock(
 
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import UserProfileInfo from "./UserProfileInfo"; // Asegúrate de que esta ruta es correcta
+import UserProfileInfo from "./UserProfileInfo";
 
 const mockProps = {
   nombre: "Benjamín",
@@ -67,4 +67,22 @@ test("5. No debería lanzar errores si la prop onClick es opcional y no se propo
     );
     fireEvent.click(profileImage);
   }).not.toThrow();
+});
+
+test("6. Debería cambiar a la imagen por defecto si la imagenURL original falla (onError)", () => {
+  render(<UserProfileInfo {...mockProps} />);
+
+  const profileImage = screen.getByAltText(
+    `Imagen de ${mockProps.nombre} ${mockProps.apellido}`
+  ) as HTMLImageElement;
+
+  expect(profileImage).toHaveAttribute("src", mockProps.imagenURL);
+
+  fireEvent.error(profileImage);
+
+  expect(profileImage).toHaveAttribute("src", MOCK_DEFAULT_IMAGE);
+
+  fireEvent.error(profileImage);
+
+  expect(profileImage).toHaveAttribute("src", MOCK_DEFAULT_IMAGE);
 });
