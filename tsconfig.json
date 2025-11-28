@@ -12,7 +12,6 @@
     },
     "lib": ["dom", "dom.iterable", "esnext"],
 
-    // MODIFICA ESTA LÍNEA
     "types": [
       "vite/client",
       "jest",
