@@ -4,19 +4,39 @@ import "@testing-library/jest-dom";
 import ProductGrid from "./ProductGrid";
 import { Producto } from "@/models/Producto";
 
+import { carritoService } from "@/services/CarritoService";
+jest.mock("@/services/CarritoService");
+const mockAddItemToCart = carritoService.addItemToCart as jest.Mock;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+jest.mock("@/components/atoms/Empty/Empty", () => ({ descripcion }: any) => (
+  <div data-testid="empty-mock">
+    <span>{descripcion}</span>
+  </div>
+));
+jest.mock("@/utils/Icons", () => ({
+  NO_PRODUCTS: "mock-icon-no-products",
+}));
+
+jest.mock("./ProductGrid.module.css", () => ({
+  gridContainer: "mocked-grid-container",
+  noProductContainer: "mocked-no-product-container",
+}));
+
 interface MockProductCardProps extends Partial<Producto> {
-  onAddCart?: (producto: Producto) => void;
+  onAddCart?: () => void;
 }
 
 jest.mock("@/components/molecules/ProductCard/ProductCard", () => ({
   __esModule: true,
-  default: ({ onAddCart, ...producto }: MockProductCardProps) => (
-    <div data-testid="product-card-mock">
-      <span>{producto.nombreProducto}</span>
-      <button
-        onClick={() => onAddCart && onAddCart(producto as Producto)}
-        aria-label={`Agregar ${producto.nombreProducto}`}
-      >
+  default: ({
+    onAddCart,
+    nombreProducto,
+    codigoProducto,
+  }: MockProductCardProps) => (
+    <div data-testid="product-card-mock" data-code={codigoProducto}>
+      <span>{nombreProducto}</span>
+      <button onClick={onAddCart} aria-label={`Agregar ${nombreProducto}`}>
         Añadir mock
       </button>
     </div>
@@ -29,12 +49,13 @@ const mockProductos = [
 ] as Producto[];
 
 describe("ProductGrid Component", () => {
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("debe renderizar mensaje de vacío si no hay productos", () => {
+  test("debe renderizar mensaje de vacío si el array de productos está vacío", () => {
     render(<ProductGrid productos={[]} />);
+    expect(screen.getByTestId("empty-mock")).toBeInTheDocument();
     expect(
       screen.getByText(/no se encontraron productos/i)
     ).toBeInTheDocument();
@@ -46,22 +67,49 @@ describe("ProductGrid Component", () => {
       mockProductos.length
     );
     expect(screen.getByText("Laptop Pro")).toBeInTheDocument();
+    expect(screen.getByText("Smartphone X")).toBeInTheDocument();
   });
 
-  test("debe pasar la función onAddCart correctamente", () => {
+  test("debe llamar a carritoService.addItemToCart con el código de producto correcto al hacer clic", () => {
+    render(<ProductGrid productos={mockProductos} />);
+
+    const laptopProButton = screen.getByRole("button", {
+      name: /agregar laptop pro/i,
+    });
+
+    fireEvent.click(laptopProButton);
+
+    expect(mockAddItemToCart).toHaveBeenCalledTimes(1);
+
+    expect(mockAddItemToCart).toHaveBeenCalledWith("P1", 1);
+  });
+
+  test("debe llamar a carritoService.addItemToCart para el segundo producto", () => {
+    render(<ProductGrid productos={mockProductos} />);
+
+    const smartphoneButton = screen.getByRole("button", {
+      name: /agregar smartphone x/i,
+    });
+
+    fireEvent.click(smartphoneButton);
+
+    expect(mockAddItemToCart).toHaveBeenCalledTimes(1);
+    expect(mockAddItemToCart).toHaveBeenCalledWith("P2", 1);
+  });
+
+  test("debe ignorar la prop onAddCart de ProductGrid y usar la implementación del servicio", () => {
     const handleAddCartMock = jest.fn();
     render(
       <ProductGrid productos={mockProductos} onAddCart={handleAddCartMock} />
     );
 
-    const addButtons = screen.getAllByText("Añadir mock");
-    fireEvent.click(addButtons[0]);
+    const laptopProButton = screen.getByRole("button", {
+      name: /agregar laptop pro/i,
+    });
+    fireEvent.click(laptopProButton);
 
-    expect(handleAddCartMock).toHaveBeenCalledTimes(1);
-    expect(handleAddCartMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        codigoProducto: "P1",
-      })
-    );
+    // Debe llamar al servicio, NO a la prop onAddCart del Grid.
+    expect(mockAddItemToCart).toHaveBeenCalledTimes(1);
+    expect(handleAddCartMock).not.toHaveBeenCalled();
   });
 });
