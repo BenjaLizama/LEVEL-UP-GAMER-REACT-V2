@@ -11,7 +11,7 @@ jest.mock("./OrderSummary.module.css", () => ({
 const mockOnPagar = jest.fn();
 
 const baseProps = {
-  total: 150.75,
+  total: "$150.75",
   onPagar: mockOnPagar,
 };
 
@@ -20,11 +20,11 @@ describe("OrderSummary", () => {
     jest.clearAllMocks();
   });
 
-  test("debería renderizar el total de la orden con el formato correcto", () => {
-    const totalMonto = 99.5;
-    render(<OrderSummary total={totalMonto} />);
+  test("debería renderizar el total de la orden con el formato string correcto", () => {
+    const totalMontoFormatted = "99,50 €";
+    render(<OrderSummary total={totalMontoFormatted} />);
 
-    const expectedText = `Total:$${totalMonto}`;
+    const expectedText = `Total: ${totalMontoFormatted}`;
 
     expect(screen.getByText(expectedText)).toBeInTheDocument();
   });
@@ -40,10 +40,9 @@ describe("OrderSummary", () => {
   test("debería aplicar las clases CSS mockeadas correctamente", () => {
     render(<OrderSummary {...baseProps} />);
 
-    const totalElement = screen.getByText(`Total:$${baseProps.total}`);
+    const totalElement = screen.getByText(`Total: ${baseProps.total}`);
 
     const innerContent = totalElement.closest("div");
-
     const container = innerContent?.parentElement;
 
     expect(container).toHaveClass("mocked-contenedor");
@@ -64,7 +63,7 @@ describe("OrderSummary", () => {
   });
 
   test("NO debería fallar si la prop onPagar no se proporciona (opcional)", () => {
-    render(<OrderSummary total={200} onPagar={undefined} />);
+    render(<OrderSummary total="$200.00" onPagar={undefined} />);
 
     const button = screen.getByRole("button", { name: /continuar compra/i });
 
