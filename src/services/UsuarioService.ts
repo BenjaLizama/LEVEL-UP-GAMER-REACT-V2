@@ -1,37 +1,36 @@
-import { SignupDTO } from "./../models/dto/SignupDTO";
-import axios from "axios";
-import { Usuario } from "@/models/Usuario";
+import { SignupDTO } from "@/models/dto/SignupDTO";
 import { LoginDTO } from "@/models/dto/LoginDTO";
+import { Usuario } from "@/models/Usuario";
+import axios from "axios";
+import { authApi, usuariosApi } from "@/services/AxiosConfig";
 
-const API_BASE_URL = "http://54.85.135.89:8084";
-const API_URL = `${API_BASE_URL}/api/usuarios`;
+const SERVER_ROOT = "http://localhost:8083";
 
 const buildAbsoluteImageUrl = (relativePath: string): string => {
-  if (!relativePath) {
-    return "";
-  }
+  if (!relativePath) return "";
 
-  const normalizedPath = relativePath.startsWith("/")
+  const path = relativePath.startsWith("/")
     ? relativePath.substring(1)
     : relativePath;
 
-  return `${API_BASE_URL}/${normalizedPath}`;
+  return `${SERVER_ROOT}/${path}`;
 };
 
 export const usuarioService = {
   login: async (credenciales: LoginDTO): Promise<Usuario> => {
     try {
-      const response = await axios.post<Usuario>(
-        `${API_URL}/login`,
-        credenciales
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const response = await authApi.post<any>("/login", credenciales);
+
+      if (response.data.token) {
+        localStorage.setItem("authToken", response.data.token);
+      }
 
       const usuario: Usuario = response.data;
-
       if (usuario.imagenPerfilURL) {
-        const absoluteUrl = buildAbsoluteImageUrl(usuario.imagenPerfilURL);
-
-        usuario.imagenPerfilURL = absoluteUrl;
+        usuario.imagenPerfilURL = buildAbsoluteImageUrl(
+          usuario.imagenPerfilURL
+        );
       }
 
       return usuario;
@@ -42,10 +41,8 @@ export const usuarioService = {
   },
 
   signup: async (informacion: SignupDTO): Promise<Usuario> => {
-    const SIGNUP_URL = `${API_URL}`;
-
     try {
-      const response = await axios.post<Usuario>(SIGNUP_URL, informacion);
+      const response = await authApi.post<Usuario>("", informacion);
 
       const usuario: Usuario = response.data;
       if (usuario.imagenPerfilURL) {
@@ -59,20 +56,16 @@ export const usuarioService = {
         const status = error.response.status;
 
         if (status === 409) {
-          console.error(
-            "Error al crear el usuario: El correo/usuario ya existe."
-          );
+          console.error("Error: El correo/usuario ya existe.");
           throw new Error("El usuario ya existe.");
         } else if (status === 400) {
-          console.error("Error al crear el usuario: Datos inválidos.");
+          console.error("Error: Datos inválidos.");
           throw new Error("Datos de registro inválidos.");
         }
-
         console.error(`Error ${status} al crear el usuario: `, error.message);
       } else {
         console.error("Error desconocido al crear el usuario: ", error);
       }
-
       throw new Error("Fallo la operación de registro.");
     }
   },
@@ -81,51 +74,32 @@ export const usuarioService = {
     idUsuario: number,
     urlImagen: string
   ): Promise<Usuario> => {
-    const ACTUALIZAR_IMAGEN_PERFIL_URL = `${API_URL}/${idUsuario}/imagen`;
-
     if (!urlImagen || urlImagen.trim() === "") {
-      throw new Error(
-        "Debe proporcionar una URL de imagen válida para actualizar."
-      );
+      throw new Error("Debe proporcionar una URL de imagen válida.");
     }
 
     try {
-      const response = await axios.put<Usuario>(
-        ACTUALIZAR_IMAGEN_PERFIL_URL,
+      const response = await usuariosApi.put<Usuario>(
+        `/${idUsuario}/imagen-url`,
         null,
         {
-          params: {
-            urlImagen: urlImagen,
-          },
+          params: { urlImagen: urlImagen },
         }
       );
 
-      return response.data;
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        const status = error.response.status;
-
-        if (status === 400) {
-          console.error(
-            "Error 400 al actualizar la imagen de perfil: Datos inválidos o falta el parámetro.",
-            error.response.data
-          );
-          throw new Error(
-            "Datos de actualización inválidos. Verifique la URL."
-          );
-        }
-
-        console.error(
-          `Error ${status} al actualizar la imagen de perfil: `,
-          error.message
-        );
-      } else {
-        console.error(
-          "Error desconocido al actualizar la imagen de perfil: ",
-          error
+      const usuario = response.data;
+      if (usuario.imagenPerfilURL) {
+        usuario.imagenPerfilURL = buildAbsoluteImageUrl(
+          usuario.imagenPerfilURL
         );
       }
 
+      return usuario;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 400) {
+        throw new Error("URL inválida o formato no soportado.");
+      }
+      console.error("Error al actualizar imagen:", error);
       throw new Error("Fallo la operación de actualización de imagen.");
     }
   },
@@ -134,57 +108,43 @@ export const usuarioService = {
     idUsuario: number,
     imagen: File
   ): Promise<Usuario> => {
-    const ACTUALIZAR_IMAGEN_PERFIL_URL = `${API_URL}/${idUsuario}/imagen`;
-
     if (!imagen) {
-      throw new Error(
-        "Debe proporcionar un archivo de imagen para actualizar."
-      );
+      throw new Error("Debe proporcionar un archivo de imagen.");
     }
 
     const formData = new FormData();
     formData.append("imagen", imagen);
 
     try {
-      const response = await axios.put<Usuario>(
-        ACTUALIZAR_IMAGEN_PERFIL_URL,
+      const response = await usuariosApi.put<Usuario>(
+        `/${idUsuario}/imagen-archivo`,
         formData,
-        {}
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
-      return response.data;
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        const status = error.response.status;
-
-        if (status === 400) {
-          console.error(
-            "Error 400 al subir el archivo: Datos inválidos o formato incorrecto.",
-            error.response.data
-          );
-          throw new Error(
-            "Archivo de imagen no válido. Verifique el formato y tamaño."
-          );
-        }
-
-        console.error(
-          `Error ${status} al subir el archivo: `,
-          error.message,
-          error.response.data
+      const usuario = response.data;
+      if (usuario.imagenPerfilURL) {
+        usuario.imagenPerfilURL = buildAbsoluteImageUrl(
+          usuario.imagenPerfilURL
         );
-      } else {
-        console.error("Error desconocido al subir el archivo: ", error);
       }
 
-      throw new Error("Debes seleccionar un archivo valido!");
+      return usuario;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Error Backend:", error.response?.data);
+      }
+      throw new Error("Error al subir el archivo.");
     }
   },
 
   obtenerUsuarioPorId: async (idUsuario: number): Promise<Usuario> => {
-    const GET_USER_URL = `${API_URL}/${idUsuario}`;
-
     try {
-      const response = await axios.get<Usuario>(GET_USER_URL);
+      const response = await usuariosApi.get<Usuario>(`/${idUsuario}`);
 
       const usuario: Usuario = response.data;
       if (usuario.imagenPerfilURL) {
@@ -195,20 +155,11 @@ export const usuarioService = {
 
       return usuario;
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        const status = error.response.status;
-
-        if (status === 404) {
-          console.error(`Usuario no encontrado con ID: ${idUsuario}`);
-          throw new Error("Usuario no encontrado.");
-        }
-
-        console.error(`Error ${status} al obtener el usuario: `, error.message);
-        throw new Error(`Fallo al obtener el usuario: Error ${status}.`);
-      } else {
-        console.error("Error desconocido al obtener el usuario: ", error);
-        throw new Error("Fallo la operación de obtención de usuario.");
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        throw new Error("Usuario no encontrado.");
       }
+      console.error("Error obteniendo usuario:", error);
+      throw new Error("Fallo la operación de obtención de usuario.");
     }
   },
 };

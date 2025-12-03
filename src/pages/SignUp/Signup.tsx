@@ -137,7 +137,6 @@ export default function Signup() {
     }
 
     setIsLoading(true);
-
     localStorage.clear();
 
     const nuevoUsuario: SignupDTO = {
@@ -150,47 +149,53 @@ export default function Signup() {
     };
 
     try {
-      const usuarioGuardado = await usuarioService.signup(nuevoUsuario);
+      await usuarioService.signup(nuevoUsuario);
 
-      if (usuarioGuardado.token) {
-        localStorage.setItem("authToken", usuarioGuardado.token);
+      const usuarioLogueado = await usuarioService.login({
+        correo: email,
+        contrasena: pass,
+      });
+
+      if (usuarioLogueado.idUsuario) {
+        localStorage.setItem("idUsuario", String(usuarioLogueado.idUsuario));
       }
 
-      if (usuarioGuardado.idUsuario) {
-        localStorage.setItem("idUsuario", String(usuarioGuardado.idUsuario));
+      if (usuarioLogueado.nombre) {
+        localStorage.setItem("nombre", String(usuarioLogueado.nombre));
       }
 
-      if (usuarioGuardado.nombre) {
-        localStorage.setItem("nombre", String(usuarioGuardado.nombre));
+      if (usuarioLogueado.apellido) {
+        localStorage.setItem("apellido", String(usuarioLogueado.apellido));
       }
 
-      if (usuarioGuardado.apellido) {
-        localStorage.setItem("apellido", String(usuarioGuardado.apellido));
+      if (usuarioLogueado.correo) {
+        localStorage.setItem("correo", String(usuarioLogueado.correo));
       }
 
-      if (usuarioGuardado.correo) {
-        localStorage.setItem("correo", String(usuarioGuardado.correo));
-      }
-
-      if (usuarioGuardado.imagenPerfilURL) {
+      if (usuarioLogueado.imagenPerfilURL) {
         localStorage.setItem(
           "imagenPerfil",
-          String(usuarioGuardado.imagenPerfilURL)
+          String(usuarioLogueado.imagenPerfilURL)
         );
       }
 
-      alert(`¡Registro exitoso! Usuario: ${usuarioGuardado.nombre}`);
+      alert(`¡Registro exitoso! Bienvenido ${usuarioLogueado.nombre}`);
       navigate("/");
     } catch (error: unknown) {
-      console.error("Error en la API durante el registro: ", error);
+      console.error("Error durante el proceso de registro/login: ", error);
 
       if (axios.isAxiosError(error) && error.response) {
         if (error.response.status === 409) {
           setApiError(
             "El correo o nombre de usuario ya se encuentra registrado."
           );
+        } else if (error.response.status === 401) {
+          setApiError(
+            "Cuenta creada, pero hubo un error al iniciar sesión automáticamente."
+          );
+          setTimeout(() => navigate("/login"), 2000);
         } else {
-          setApiError("Ocurrió un error inesperado al intentar registrarse.");
+          setApiError("Ocurrió un error inesperado.");
         }
       } else {
         setApiError(

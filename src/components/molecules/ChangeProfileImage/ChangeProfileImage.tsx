@@ -18,16 +18,10 @@ export default function ChangeProfileImage({
   const rawUserId = localStorage.getItem("idUsuario");
   const currentUserId = rawUserId ? Number(rawUserId) : null;
 
-  const setUser = (updatedUser: Usuario) => {
-    console.log(
-      "Usuario actualizado. Esto debería llamar a tu store global.",
-      updatedUser
-    );
-  };
-
   const [file, setFile] = useState<File | null>(null);
   const [link, setLink] = useState<string>("");
   const [previewURL, setPreviewURL] = useState<string | null>(null);
+
   const [linkError, setLinkError] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -49,13 +43,11 @@ export default function ChangeProfileImage({
     } else {
       setPreviewURL(null);
     }
-
     setFile(selectedFile);
   };
 
   const handleNativeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0] || null;
-    processSelectedFile(selectedFile);
+    processSelectedFile(e.target.files?.[0] || null);
     e.target.value = "";
   };
 
@@ -65,10 +57,9 @@ export default function ChangeProfileImage({
     setSubmissionError(null);
 
     if (newValue.length > 0) {
-      if (file) setFile(null);
+      setFile(null);
       setPreviewURL(newValue);
     } else {
-      setFile(null);
       setPreviewURL(null);
     }
   };
@@ -77,21 +68,12 @@ export default function ChangeProfileImage({
     e.preventDefault();
 
     if (!currentUserId || isNaN(currentUserId)) {
-      setSubmissionError(
-        "Error de autenticación: El ID de usuario no es válido o no se encontró."
-      );
+      setSubmissionError("Error: No se encontró la sesión del usuario.");
       return;
     }
 
-    if (!file && !link) {
-      setSubmissionError("Debes seleccionar una imagen o proporcionar un link");
-      return;
-    }
-
-    if (link && linkError) {
-      setSubmissionError(
-        "El link proporcionado es inválido o no se pudo cargar la imagen. Por favor, corrígelo."
-      );
+    if ((!file && !link) || (link && linkError)) {
+      setSubmissionError("Debes proporcionar una imagen válida.");
       return;
     }
 
@@ -100,46 +82,42 @@ export default function ChangeProfileImage({
 
     try {
       let usuarioActualizado: Usuario;
-      let finalImageUrl: string;
-      const timestamp = new Date().getTime();
 
       if (file) {
         usuarioActualizado = await usuarioService.actualizarImagenPerfilArchivo(
           currentUserId,
           file
         );
-
-        if (usuarioActualizado.imagenPerfilURL) {
-          finalImageUrl = `http://localhost:8083${usuarioActualizado.imagenPerfilURL}`;
-        } else {
-          throw new Error("El servidor no devolvió una URL de imagen válida.");
-        }
-      } else if (link) {
+      } else {
         usuarioActualizado = await usuarioService.actualizarImagenPerfil(
           currentUserId,
           link
         );
-        finalImageUrl = `${link}?v=${timestamp}`;
-      } else {
-        return;
       }
 
-      localStorage.setItem("imagenPerfil", finalImageUrl);
+      if (usuarioActualizado.imagenPerfilURL) {
+        localStorage.setItem(
+          "imagenPerfil",
+          usuarioActualizado.imagenPerfilURL
+        );
 
-      setUser(usuarioActualizado);
+        console.log("Estado global actualizado:", usuarioActualizado);
+      } else {
+        throw new Error("El servidor no devolvió la URL de la imagen.");
+      }
 
-      onSuccess();
       setLink("");
       setFile(null);
       setPreviewURL(null);
+      onSuccess();
     } catch (error) {
-      console.error("Error al actualizar la imagen de perfil:", error);
-      const errorMessage =
+      console.error("Error al actualizar perfil:", error);
+      const msg =
         error instanceof Error
           ? error.message
-          : "Fallo la actualización de la imagen.";
-
-      onError(errorMessage);
+          : "Error desconocido al actualizar.";
+      setSubmissionError(msg);
+      onError(msg);
     } finally {
       setIsLoading(false);
     }
@@ -151,40 +129,26 @@ export default function ChangeProfileImage({
   const handleDragEnter = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     e.stopPropagation();
-
     dragCounter.current++;
-
-    if (dragCounter.current === 1) {
-      setIsDragging(true);
-    }
+    if (dragCounter.current === 1) setIsDragging(true);
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     e.stopPropagation();
-
     dragCounter.current--;
-
-    if (dragCounter.current === 0) {
-      setIsDragging(false);
-    }
+    if (dragCounter.current === 0) setIsDragging(false);
   };
 
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     e.stopPropagation();
-
     setIsDragging(false);
     dragCounter.current = 0;
-
-    const files = e.dataTransfer.files || [];
-    const droppedFile = files[0] || null;
-
-    processSelectedFile(droppedFile);
+    processSelectedFile(e.dataTransfer.files[0] || null);
   };
 
   const isDisabled = !(file || link.length > 0) || linkError || isLoading;
-
   const labelClassName = `${styles.inputFileLabel} ${
     isDragging ? styles.isDragging : ""
   }`;
@@ -200,16 +164,15 @@ export default function ChangeProfileImage({
             className={styles.previewImage}
             onError={() => {
               setLinkError(true);
-              setPreviewURL(null);
-              setSubmissionError("No se pudo cargar la imagen desde el link.");
+              if (!file)
+                setSubmissionError(
+                  "No se pudo cargar la imagen desde el link."
+                );
             }}
           />
         </div>
       )}
 
-      {linkError && (
-        <p className={styles.errorMessage}>El link no es una imagen válida.</p>
-      )}
       {submissionError && (
         <p className={styles.errorMessage}>{submissionError}</p>
       )}
@@ -221,7 +184,7 @@ export default function ChangeProfileImage({
             onValueChange={handleLinkChange}
             icon={LINK}
             label="Link de tu imagen"
-            disabled={isLoading}
+            disabled={isLoading || !!file}
           />
 
           <input
@@ -250,7 +213,7 @@ export default function ChangeProfileImage({
         </div>
 
         <Button type="submit" disabled={isDisabled}>
-          {isLoading ? "Subiendo..." : "Subir imagen"}
+          {isLoading ? "Subiendo..." : "Actualizar Imagen"}
         </Button>
       </form>
     </div>
