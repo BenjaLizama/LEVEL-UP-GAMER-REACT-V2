@@ -1,0 +1,63 @@
+.cartControlButtonsContainer {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  column-gap: 0.2rem;
+  background-color: var(--fondo-transparente);
+  padding: 0.3rem;
+  border-radius: 0.3rem;
+  width: 130px;
+  transition: all 0.2s ease;
+
+  path {
+    transition: all 0.2s;
+    color: var(--color-fuente-principal);
+  }
+}
+
+.cartControlButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 0.5rem;
+}
+
+.cartControlButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  outline: none;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  height: 100%;
+}
+
+.cartControlButton:hover {
+  path {
+    color: var(--color-fuente-secundario);
+  }
+}
+
+.cartControlButtonsDelete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.cartControlButtonsDelete:hover {
+  path {
+    color: #ff0808;
+  }
+}
+
+.cartControlButtonsCantidad {
+  cursor: default;
+}
