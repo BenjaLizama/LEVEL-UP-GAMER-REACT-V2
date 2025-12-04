@@ -2,29 +2,32 @@ import { Carrito } from "@/models/Carrito";
 import { ItemCarrito } from "@/models/ItemCarrito";
 import { carritosApi } from "@/services/AxiosConfig";
 
+type VoidFunction = () => void;
+
 export class CarritoService {
   private cartItems: ItemCarrito[] = [];
   private total: number = 0;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  private subscribers: Function[] = [];
+  private subscribers: VoidFunction[] = [];
 
-  private getUserId(): number {
+  private getUserId(): number | null {
     const idStored = localStorage.getItem("idUsuario");
     if (!idStored) {
-      console.warn("No hay un usuario logueado");
-      return -1;
+      console.warn(
+        "No hay un usuario logueado, operación de carrito abortada."
+      );
+      return null;
     }
     return parseInt(idStored);
   }
 
   async addItemToCart(codigoProducto: string, cantidad: number): Promise<void> {
+    const idUsuario = this.getUserId();
+    if (!idUsuario) return;
+
     const payload = {
       codigoProducto: codigoProducto,
       cantidad: cantidad,
     };
-
-    const idUsuario = this.getUserId();
-    if (idUsuario === -1) return;
 
     try {
       const response = await carritosApi.post<Carrito>(
@@ -32,22 +35,20 @@ export class CarritoService {
         payload
       );
 
-      const updatedCarrito: Carrito = response.data;
-      this.updateState(updatedCarrito);
+      this.updateState(response.data);
     } catch (error) {
-      console.error("Error al actualizar el carrito:", error);
+      console.error("Error al agregar item al carrito:", error);
     }
   }
 
   async getItemCart(): Promise<void> {
     const idUsuario = this.getUserId();
-    if (idUsuario === -1) return;
+    if (!idUsuario) return;
 
     try {
       const response = await carritosApi.get<Carrito>(`/${idUsuario}`);
 
-      const updatedCarrito: Carrito = response.data;
-      this.updateState(updatedCarrito);
+      this.updateState(response.data);
     } catch (error) {
       console.error("Error al obtener el carrito:", error);
     }
@@ -67,18 +68,16 @@ export class CarritoService {
     return this.total;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  public subscribe(callback: Function): void {
+  public subscribe(callback: VoidFunction): void {
     this.subscribers.push(callback);
+  }
+
+  public unsubscribe(callback: VoidFunction): void {
+    this.subscribers = this.subscribers.filter((n) => n !== callback);
   }
 
   private notifySubscribers(): void {
     this.subscribers.forEach((callback) => callback());
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  public unsubscribe(callback: Function): void {
-    this.subscribers = this.subscribers.filter((n) => n !== callback);
   }
 }
 
