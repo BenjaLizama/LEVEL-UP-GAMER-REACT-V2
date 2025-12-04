@@ -1,7 +1,7 @@
 export interface Producto {
   codigoProducto: string;
   nombreProducto: string;
-  categoriaProducto: string;
+  categoria: string;
   descripcionProducto: string;
   precioProducto: number;
   imagenesUrl: Array<string>;
