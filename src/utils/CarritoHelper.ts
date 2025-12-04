@@ -5,6 +5,7 @@ interface CartItemDisplay extends ItemCarrito {
   nombre: string;
   img: string;
   precio?: number;
+  categoria: string;
 }
 
 export const enriqucerCarrito = (
@@ -21,6 +22,7 @@ export const enriqucerCarrito = (
         productoEncontrado?.nombreProducto || "no se encontro el producto",
       img: productoEncontrado?.imagenesUrl[0] || "imagen por defecto",
       precioUnitario: item.precioUnitario,
+      categoria: productoEncontrado?.categoria || "Sin categoria",
     };
   });
 };

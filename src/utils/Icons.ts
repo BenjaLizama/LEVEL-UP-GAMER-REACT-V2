@@ -22,6 +22,9 @@ const LOGOUT = "tabler:logout";
 const LINK = "ri:link";
 const SEARCH = "icomoon-free:search";
 const NO_PRODUCTS = "fluent:box-dismiss-20-filled";
+const TRASH = "fa6-solid:trash";
+const ADD = "fa7-solid:add";
+const REMOVE = "mingcute:minimize-fill";
 
 export {
   HOME,
@@ -48,4 +51,7 @@ export {
   LINK,
   SEARCH,
   NO_PRODUCTS,
+  TRASH,
+  ADD,
+  REMOVE,
 };
