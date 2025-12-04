@@ -2,9 +2,10 @@ import React from "react";
 import styles from "./CartItem.module.css";
 
 interface PlantillaProps {
-  precio: number;
+  precio: string;
   nombre: string;
   cantidad: number;
+  categoria: string;
   idItem: string;
   children?: React.ReactNode;
   imagen: string;
@@ -24,11 +25,15 @@ export default function CartItem(props: PlantillaProps) {
         </div>
         <div className={styles.info}>
           <p className={styles.nombreProd}>{props.nombre}</p>
-          <p>precio: ${props.precio}</p>
-          <p>cantidad: {props.cantidad}</p>
+          <div className={styles.informacionProductoContainer}>
+            <div className={styles.datos}>
+              <p className={styles.categoria}>Categoria: {props.categoria}</p>
+              <p className={styles.precio}>Precio: {props.precio}</p>
+            </div>
+            <div className={styles.child}>{props.children}</div>
+          </div>
         </div>
       </div>
-      <div className={styles.child}>{props.children}</div>
     </div>
   );
 }

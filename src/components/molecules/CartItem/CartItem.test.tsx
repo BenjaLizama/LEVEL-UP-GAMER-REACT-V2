@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import CartItem from "./CartItem";
+import { formatearACLP } from "@/utils/Funciones";
 
 jest.mock("./CartItem.module.css", () => ({
   contenido: "mocked-contenido",
@@ -14,7 +15,7 @@ jest.mock("./CartItem.module.css", () => ({
 }));
 
 const baseProps = {
-  precio: 45.99,
+  precio: formatearACLP(5000),
   nombre: "Café premium - Colombia",
   cantidad: 2,
   idItem: "ABC-123",
@@ -27,7 +28,7 @@ describe("CartItem", () => {
 
     expect(screen.getByText(baseProps.nombre)).toBeInTheDocument();
 
-    expect(screen.getByText(/precio: \$45.99/i)).toBeInTheDocument();
+    expect(screen.getByText(/precio: \$5.000/i)).toBeInTheDocument();
 
     expect(
       screen.getByText(`cantidad: ${baseProps.cantidad}`)

@@ -33,8 +33,10 @@
 
 .info {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   flex-direction: column;
+  width: 100%;
 
   p {
     margin: 0;
@@ -45,4 +47,30 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.informacionProductoContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.nombreProd {
+  font-size: 20px;
+}
+
+.datos {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+}
+
+.categoria {
+  font-size: 14px;
+}
+
+.precio {
+  font-size: 14px;
 }
