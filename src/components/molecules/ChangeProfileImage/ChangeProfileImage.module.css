@@ -39,7 +39,7 @@
 
 .inputFileLabel {
   display: inline-block;
-  background-color: var(--color-fondo);
+  background-color: var(--color-fondo-secundario);
   border-radius: 0.5rem;
   padding: 2rem;
   transition: all 0.2s linear;
