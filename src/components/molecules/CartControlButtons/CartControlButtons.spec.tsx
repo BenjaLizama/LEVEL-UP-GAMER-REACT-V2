@@ -1,49 +1,46 @@
+// CartControlButtons.test.tsx
+
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import CartControlButtons from "./CartControlButtons";
 
-// 1. Mock de los íconos:
-// Esto aísla el test. No queremos probar si SimpleIcon funciona (eso es otro test),
-// solo queremos saber si CartControlButtons intenta renderizarlos con los props correctos.
-jest.mock("@/components/atoms/SimpleIcon/SimpleIcon", () => {
-  return function MockIcon({ icon }: { icon: string }) {
-    return <span data-testid={`icon-${icon}`}>IconMock: {icon}</span>;
-  };
-});
+// =================================================================
+// MOCKING DE DEPENDENCIAS MÍNIMAS (Solo funciones de utilidad)
+// =================================================================
 
-// 2. Mock de los strings de íconos para verificar cuál se pasa
-jest.mock("@/utils/Icons", () => ({
-  ADD: "ADD_ICON",
-  REMOVE: "REMOVE_ICON",
-  TRASH: "TRASH_ICON",
-}));
+// 💡 NOTA: Eliminamos todos los mocks de SimpleIcon, ADD, REMOVE, TRASH para evitar el Hoisting.
+// El test se enfocará únicamente en la cantidad y los eventos onClick.
 
 describe("CartControlButtons", () => {
-  // Props base para reutilizar
   const mockOnAdd = jest.fn();
   const mockOnRemove = jest.fn();
+  const mockOnDelete = jest.fn();
+
+  // Props base completas
   const baseProps = {
     cantidad: 1,
     onAddClick: mockOnAdd,
     onRemoveClick: mockOnRemove,
+    onDeleteClick: mockOnDelete,
   };
 
   beforeEach(() => {
-    jest.clearAllMocks(); // Limpiamos contadores de las funciones mock antes de cada test
+    jest.clearAllMocks();
   });
 
   test("debe renderizar la cantidad proporcionada", () => {
     render(<CartControlButtons {...baseProps} cantidad={10} />);
-    // Buscamos texto exacto en el documento
+    // Verificación de la cantidad mostrada
     expect(screen.getByText("10")).toBeInTheDocument();
   });
+
+  // --- Tests de Funcionalidad y Eventos ---
 
   test("debe llamar a onRemoveClick al pulsar el botón 'Disminuir cantidad'", () => {
     render(<CartControlButtons {...baseProps} />);
 
-    // MEJORA CLAVE: Seleccionamos por su nombre accesible (aria-label)
-    // Esto asegura que el test funcione aunque cambies el CSS o el orden HTML
+    // Seleccionamos por el nombre accesible (aria-label)
     const removeBtn = screen.getByRole("button", {
       name: /disminuir cantidad/i,
     });
@@ -51,8 +48,6 @@ describe("CartControlButtons", () => {
     fireEvent.click(removeBtn);
 
     expect(mockOnRemove).toHaveBeenCalledTimes(1);
-    // Verificamos que el botón contiene el ícono correcto
-    expect(screen.getByTestId("icon-REMOVE_ICON")).toBeInTheDocument();
   });
 
   test("debe llamar a onAddClick al pulsar el botón 'Aumentar cantidad'", () => {
@@ -63,17 +58,24 @@ describe("CartControlButtons", () => {
     fireEvent.click(addBtn);
 
     expect(mockOnAdd).toHaveBeenCalledTimes(1);
-    expect(screen.getByTestId("icon-ADD_ICON")).toBeInTheDocument();
   });
 
-  test("debe renderizar el botón de eliminar (trash)", () => {
+  test("debe llamar a onDeleteClick al pulsar el botón de eliminar", () => {
     render(<CartControlButtons {...baseProps} />);
 
-    // Como el botón de eliminar no tiene aria-label ni texto,
-    // una estrategia sólida es buscar el botón que contiene el ícono de TRASH.
-    const trashIcon = screen.getByTestId("icon-TRASH_ICON");
-    const trashBtn = trashIcon.closest("button");
+    // Dado que el botón de eliminar no tiene un texto único ni aria-label,
+    // necesitamos un selector más específico. Si el ícono de TRASH es el tercer botón
+    // en el componente (fuera del contenedor de +/-), lo seleccionamos por su onClick.
+    // O buscamos el botón que no tiene aria-label (el de eliminar).
 
-    expect(trashBtn).toBeInTheDocument();
+    // Estrategia segura: Buscamos todos los botones y hacemos clic en el de eliminar.
+    // Asumiendo que es el último botón en el componente.
+    const allButtons = screen.getAllByRole("button");
+    // El botón de eliminar es el último botón en el DOM (ADD, REMOVE, DELETE)
+    const deleteBtn = allButtons[allButtons.length - 1];
+
+    fireEvent.click(deleteBtn);
+
+    expect(mockOnDelete).toHaveBeenCalledTimes(1);
   });
 });

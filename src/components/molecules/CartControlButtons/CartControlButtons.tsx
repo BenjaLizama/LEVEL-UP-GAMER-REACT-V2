@@ -7,10 +7,11 @@ interface CartControlButtonsProps {
   cantidad: number;
   onAddClick: () => void;
   onRemoveClick: () => void;
+  onDeleteClick: () => void;
 }
 
 export default function CartControlButtons(props: CartControlButtonsProps) {
-  const { cantidad, onRemoveClick, onAddClick } = props;
+  const { cantidad, onRemoveClick, onAddClick, onDeleteClick } = props;
 
   return (
     <div className={styles.cartControlButtonsContainer}>
@@ -20,7 +21,7 @@ export default function CartControlButtons(props: CartControlButtonsProps) {
           className={styles.cartControlButton}
           onClick={onRemoveClick}
         >
-          <SimpleIcon icon={REMOVE} color="white" fontSize={22} />
+          <SimpleIcon icon={REMOVE} color="white" fontSize={14} />
         </button>
         <span className={styles.cartControlButtonsCantidad}>{cantidad}</span>
         <button
@@ -28,11 +29,14 @@ export default function CartControlButtons(props: CartControlButtonsProps) {
           className={styles.cartControlButton}
           onClick={onAddClick}
         >
-          <SimpleIcon icon={ADD} color="white" fontSize={24} />
+          <SimpleIcon icon={ADD} color="white" fontSize={18} />
         </button>
       </div>
-      <button className={styles.cartControlButtonsDelete}>
-        <SimpleIcon icon={TRASH} fontSize={16} />
+      <button
+        className={styles.cartControlButtonsDelete}
+        onClick={onDeleteClick}
+      >
+        <SimpleIcon icon={TRASH} fontSize={12} />
       </button>
     </div>
   );
