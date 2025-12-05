@@ -8,31 +8,17 @@ import UserProfileInfo from "@/components/molecules/UserProfileInfo/UserProfileI
 import Modal from "@/components/organisms/Modal/Modal";
 import ChangeProfileImage from "@/components/molecules/ChangeProfileImage/ChangeProfileImage";
 import { TemporaryAlert } from "@/components/molecules/AlertBox/AlertBox";
+import { useAlertQueue } from "@/hooks/useAlertQueue";
 
 export default function Profile() {
   const idUsuario = localStorage.getItem("idUsuario");
 
-  const [alert, setAlert] = useState<{
-    message: string;
-    type: "success" | "error" | "warning";
-  } | null>(null);
+  const { currentAlert, handleShowAlert, handleCloseAlert } = useAlertQueue();
 
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
-  const handleCloseAlert = () => {
-    setAlert(null);
-  };
-
-  const handleShowAlert = (
-    message: string,
-    type: "success" | "error" | "warning"
-  ) => {
-    setAlert({ message, type });
-  };
-
   const handleOpenProfileModal = () => {
     setIsProfileModalOpen(true);
-    handleCloseAlert();
   };
 
   const handleCloseProfileModal = () => {
@@ -51,15 +37,15 @@ export default function Profile() {
 
   return (
     <div className={styles.main}>
-      {alert && (
+      {currentAlert && (
         <TemporaryAlert
-          message={alert.message}
-          type={alert.type}
+          key={currentAlert.id}
+          message={currentAlert.message}
+          type={currentAlert.type}
           durationMs={5000}
           onClose={handleCloseAlert}
         />
       )}
-
       {!idUsuario && <LoginProfileInfo />}
       {idUsuario && (
         <>
@@ -88,7 +74,6 @@ export default function Profile() {
           </div>
         </>
       )}
-
       {isProfileModalOpen && (
         <Modal
           onClose={handleCloseProfileModal}
