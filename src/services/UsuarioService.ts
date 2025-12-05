@@ -4,7 +4,7 @@ import { Usuario } from "@/models/Usuario";
 import axios, { AxiosResponse } from "axios";
 import { authApi, usuariosApi, pagosApi } from "@/services/AxiosConfig";
 
-const SERVER_ROOT = "http://localhost:8083";
+const SERVER_ROOT = "http://54.85.135.89:8083";
 
 interface PaymentSessionResponse {
   url: string;
