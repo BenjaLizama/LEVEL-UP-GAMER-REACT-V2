@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 
 // Aqui se actualiza la ip del servidor
-const DIRECCION_IP = "localhost";
+const DIRECCION_IP = "54.85.135.89";
 
 export const URLS = {
   AUTH: `http://${DIRECCION_IP}:8083/api/auth`,
