@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./PaymentSucces.module.css";
+import styles from "./PaymentSuccess.module.css";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { usuarioService } from "@/services/UsuarioService";
 import Button from "@/components/atoms/Button/Button";
