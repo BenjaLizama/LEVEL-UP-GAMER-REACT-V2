@@ -1,0 +1,30 @@
+.paymentSuccesContainer {
+  margin-top: 7rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.paymentSuccesTitle {
+  margin: 1rem 0rem;
+}
+
+.paymentSuccesState {
+  margin: 0rem 0rem 1rem 0rem;
+  font-size: 20px;
+  text-align: center;
+}
+
+.spinner {
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
