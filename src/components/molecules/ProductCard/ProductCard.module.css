@@ -2,9 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-direction: row;
   padding: 0.5rem;
-  background-color: var(--color-texto-principal);
+  background-color: var(--color-fondo-secundario);
   box-shadow: var(--sombra) inset;
   border-radius: 0.2rem;
   cursor: pointer;
@@ -45,16 +44,20 @@
   display: flex;
   flex-direction: column;
   font-weight: 500;
+  width: 100%;
 }
 
 .third {
-  width: 40%;
+  width: 90%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .addButtonCart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   cursor: pointer;
   outline: none;
@@ -62,6 +65,7 @@
   background: none;
   color: var(--color-texto-principal);
   transition: all 0.2s ease;
+  width: 100%;
 }
 
 .addButtonCart:hover {
@@ -113,9 +117,8 @@
 
   .imagen {
     width: auto;
-    height: 100%; /* Le decimos que intente llenar el contenedor */
-    max-height: 15rem; /* <-- ESTA ES LA LÍNEA CLAVE. (15rem = 240px) */
-    /* Ajusta este valor (ej: 12rem, 18rem) al tamaño máximo que desees */
+    height: 100%;
+    max-height: 15rem;
     object-fit: contain;
   }
 

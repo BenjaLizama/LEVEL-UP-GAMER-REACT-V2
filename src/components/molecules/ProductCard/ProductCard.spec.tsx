@@ -1,7 +1,7 @@
 import React from "react";
 import { TextEncoder, TextDecoder } from "util";
 Object.assign(global, { TextEncoder, TextDecoder });
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import ProductCard from "./ProductCard";
 import { Producto } from "@/models/Producto";
@@ -22,14 +22,20 @@ jest.mock(
   () => "no-image-mock.png"
 );
 
-interface MockIconProps {
-  icon: string;
-  [key: string]: unknown;
-}
-
-jest.mock("@/components/atoms/SimpleIcon/SimpleIcon", () => {
-  return function MockIcon(props: MockIconProps) {
-    return <span data-testid="icon-mock">{props.icon}</span>;
+jest.mock("@/components/atoms/Button/Button", () => {
+  return function MockButton({
+    onClick,
+    children,
+  }: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onClick: any;
+    children: React.ReactNode;
+  }) {
+    return (
+      <button onClick={onClick} data-testid="add-to-cart-button">
+        {children}
+      </button>
+    );
   };
 });
 
@@ -38,12 +44,17 @@ const mockProduct: Producto = {
   nombreProducto: "Teclado Mecánico",
   descripcionProducto: "Esta es la descripción",
   precioProducto: 50000,
-  imagenesUrl: ["https://example.com/teclado.jpg"],
+  imagenesUrl: [
+    "https://example.com/teclado.jpg",
+    "https://example.com/teclado2.jpg",
+  ],
   cantidadStockProducto: 10,
-  categoriaProducto: "Periféricos",
+  categoria: "Periféricos",
 };
 
 describe("ProductCard Component", () => {
+  const mockOnAddCart = jest.fn();
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -67,17 +78,76 @@ describe("ProductCard Component", () => {
     expect(img.src).toBe(mockProduct.imagenesUrl![0]);
   });
 
-  test("muestra la imagen correcta", () => {
-    const productWithoutImage = { ...mockProduct, imagenesUrl: [] };
+  test("debe mostrar la imagen por defecto cuando imagenesUrl es nulo o vacío", () => {
+    const productWithoutImages = { ...mockProduct, imagenesUrl: [] };
+    const { rerender } = render(
+      <MemoryRouter>
+        <ProductCard {...productWithoutImages} />
+      </MemoryRouter>
+    );
+
+    const img1 = screen.getByAltText(
+      productWithoutImages.nombreProducto
+    ) as HTMLImageElement;
+    expect(img1.src).toContain("no-image-mock.png");
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const productWithNullImages = { ...mockProduct, imagenesUrl: null as any };
+    rerender(
+      <MemoryRouter>
+        <ProductCard {...productWithNullImages} />
+      </MemoryRouter>
+    );
+
+    const img2 = screen.getByAltText(
+      productWithNullImages.nombreProducto
+    ) as HTMLImageElement;
+    expect(img2.src).toContain("no-image-mock.png");
+  });
+
+  test("debe navegar a la URL del producto al hacer clic en la tarjeta (contenedor principal)", () => {
     render(
       <MemoryRouter>
         <ProductCard {...mockProduct} />
       </MemoryRouter>
     );
 
-    const img = screen.getByAltText(
-      productWithoutImage.nombreProducto
-    ) as HTMLImageElement;
-    expect(img.src).not.toContain("no-image-mock.png");
+    const cardElement = screen.getByRole("button", {
+      name: new RegExp(mockProduct.nombreProducto, "i"),
+    });
+
+    fireEvent.click(cardElement);
+
+    expect(mockNavigate).toHaveBeenCalledWith(
+      `/producto/${mockProduct.codigoProducto}`
+    );
+  });
+
+  test("el clic en el botón Añadir NO debe disparar la navegación", () => {
+    render(
+      <MemoryRouter>
+        <ProductCard {...mockProduct} onAddCart={mockOnAddCart} />
+      </MemoryRouter>
+    );
+
+    const addButton = screen.getAllByTestId("add-to-cart-button")[0];
+
+    fireEvent.click(addButton);
+
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  test("el botón de Añadir no debe fallar si onAddCart no está definido", () => {
+    render(
+      <MemoryRouter>
+        <ProductCard {...mockProduct} onAddCart={undefined} />
+      </MemoryRouter>
+    );
+
+    const addButton = screen.getAllByTestId("add-to-cart-button")[0];
+
+    expect(() => {
+      fireEvent.click(addButton);
+    }).not.toThrow();
   });
 });

@@ -3,8 +3,6 @@ import styles from "./ProductCard.module.css";
 import { Producto } from "@/models/Producto";
 import no_image from "@/assets/images/defaultImages/no-product-image.png";
 import { formatearACLP } from "@/utils/Funciones";
-import SimpleIcon from "@/components/atoms/SimpleIcon/SimpleIcon";
-import { ADD_CART } from "@/utils/Icons";
 import { useNavigate } from "react-router-dom";
 import Button from "@/components/atoms/Button/Button";
 
@@ -62,10 +60,13 @@ export default function ProductCard(props: ProductCardProps) {
         </div>
       </div>
       <div className={styles.third}>
-        <button className={styles.addButtonCart} onClick={handleAddCardBtn}>
+        {/* <button className={styles.addButtonCart} onClick={handleAddCardBtn}>
           <SimpleIcon icon={ADD_CART} fontSize={40} />
           <span className={styles.addButtonCartSpan}>+1</span>
-        </button>
+        </button> */}
+        <div className={styles.addButtonCart}>
+          <Button onClick={handleAddCardBtn}>Añadir al carrito</Button>
+        </div>
         {/* Botón diseño escritorio */}
         <div className={styles.btnAddCartDesktop}>
           <Button
@@ -73,7 +74,7 @@ export default function ProductCard(props: ProductCardProps) {
               handleAddCardBtn(e)
             }
           >
-            Agregar al carrito
+            Añadir al carrito
           </Button>
         </div>
       </div>
