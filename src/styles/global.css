@@ -3,6 +3,7 @@
 .modoClaro {
   --color-fondo: #eee;
   --color-fondo-secundario: #dbdbdb;
+  --color-fondo-secundario-transparencia: #dbdbdbd0;
   --color-fuente-principal: #222;
   --color-fuente-secundario: #797979;
   --fondo-transparente: #ffffff;
