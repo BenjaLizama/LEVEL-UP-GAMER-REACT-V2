@@ -10,7 +10,7 @@ export default function OrderSummary({ total, onPagar }: plantillaOrder) {
   return (
     <div className={styles.contenedor}>
       <div className={styles.contenido}>
-        <p>Total: {total}</p>
+        <p className={styles.total}>Total: {total}</p>
         <button className={styles.button} onClick={onPagar}>
           Continuar compra
         </button>

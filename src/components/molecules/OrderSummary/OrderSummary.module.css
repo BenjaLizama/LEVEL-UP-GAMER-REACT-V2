@@ -2,15 +2,22 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  background-color: var(--color-hover-producto);
+  backdrop-filter: blur(5px);
+  background-color: var(--color-fondo-secundario-transparencia);
+  transition: all 0.2s ease;
 }
 
 .contenido {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: end;
   flex-direction: column;
-  padding: 2rem 2rem;
+  padding: 1.5rem 2rem;
+  width: 100%;
+}
+
+.total {
+  color: var(--color-fuente-principal);
+  transition: all 0.2s ease;
 }
 
 .button {
