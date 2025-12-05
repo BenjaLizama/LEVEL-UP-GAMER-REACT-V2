@@ -1,6 +1,6 @@
 import { ItemCarrito } from "@/models/ItemCarrito";
 import { carritoService } from "@/services/CarritoService";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 interface CartData {
   itemCart: ItemCarrito[];

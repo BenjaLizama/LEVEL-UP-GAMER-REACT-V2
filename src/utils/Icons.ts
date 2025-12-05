@@ -25,6 +25,7 @@ const NO_PRODUCTS = "fluent:box-dismiss-20-filled";
 const TRASH = "fa6-solid:trash";
 const ADD = "fa7-solid:add";
 const REMOVE = "mingcute:minimize-fill";
+const EMPTY_CART = "solar:cart-4-bold";
 
 export {
   HOME,
@@ -54,4 +55,5 @@ export {
   TRASH,
   ADD,
   REMOVE,
+  EMPTY_CART,
 };
