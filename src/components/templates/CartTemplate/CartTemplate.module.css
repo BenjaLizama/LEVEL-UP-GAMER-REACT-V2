@@ -10,5 +10,16 @@
   margin-top: 4rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  justify-self: center;
   row-gap: 0.4rem;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .seccionItems {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 4rem;
+  }
 }
