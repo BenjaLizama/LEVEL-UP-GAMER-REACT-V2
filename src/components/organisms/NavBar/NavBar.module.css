@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: space-between;
   grid-template-columns: 1fr 2fr 1fr;
+  transition: all 0.2s ease;
 }
 
 .left {

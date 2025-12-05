@@ -7,7 +7,7 @@
   padding: 0.5rem 0.2rem;
   border-radius: 0.4rem;
   transition: all 0.3s ease;
-  background-color: #39393945;
+  background-color: var(--color-fondo-secundario);
   box-shadow: var(--sombra) inset;
   color: var(--color-fuente-principal);
 }
