@@ -1,7 +1,8 @@
 .alert {
   position: fixed;
-  top: 90vh;
+  top: 91vh;
   right: 1px;
+  left: 1px;
   z-index: 1000;
 
   padding: 12px 20px;
