@@ -1,5 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./AlertBox.module.css";
+
+const TRANSITION_DURATION_MS = 500;
 
 export interface TemporaryAlertProps {
   message: string;
@@ -14,13 +16,27 @@ export const TemporaryAlert: React.FC<TemporaryAlertProps> = ({
   durationMs = 3000,
   onClose,
 }) => {
+  const [shouldAnimateOut, setShouldAnimateOut] = useState(false);
+
+  const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      onClose();
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
+    const autoCloseTimer = setTimeout(() => {
+      setShouldAnimateOut(true);
+
+      const removeTimer = setTimeout(onClose, TRANSITION_DURATION_MS);
+
+      return () => clearTimeout(removeTimer);
     }, durationMs);
 
-    return () => clearTimeout(timer);
-  }, [durationMs, onClose]);
+    return () => clearTimeout(autoCloseTimer);
+  }, [durationMs, onClose, isMounted]);
 
   const getStyles = (alertType: typeof type) => {
     switch (alertType) {
@@ -37,12 +53,18 @@ export const TemporaryAlert: React.FC<TemporaryAlertProps> = ({
 
   const style = getStyles(type);
 
+  const animationClass = shouldAnimateOut
+    ? styles.animateOut
+    : isMounted
+    ? styles.visible
+    : "";
+
   return (
     <div
       style={{
         ...style,
       }}
-      className={styles.alert}
+      className={`${styles.alert} ${animationClass}`}
     >
       {message}
     </div>

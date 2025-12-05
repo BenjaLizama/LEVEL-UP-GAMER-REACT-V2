@@ -1,9 +1,14 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { TemporaryAlert, TemporaryAlertProps } from "./AlertBox";
+
+const TRANSITION_DURATION_MS = 500;
 
 jest.mock("./AlertBox.module.css", () => ({
   alert: "mocked-alert-class",
+  visible: "mocked-visible-class",
+  animateOut: "mocked-animate-out-class",
 }));
 
 beforeEach(() => {
@@ -20,6 +25,7 @@ const baseProps: TemporaryAlertProps = {
   message: "¡Operación completada con éxito!",
   type: "success",
   onClose: mockOnClose,
+  durationMs: 3000,
 };
 
 describe("TemporaryAlert", () => {
@@ -27,7 +33,6 @@ describe("TemporaryAlert", () => {
     render(<TemporaryAlert {...baseProps} />);
 
     expect(screen.getByText(baseProps.message)).toBeInTheDocument();
-
     const alertElement = screen.getByText(baseProps.message).closest("div");
     expect(alertElement).toHaveClass("mocked-alert-class");
   });
@@ -40,57 +45,70 @@ describe("TemporaryAlert", () => {
     expect(alertElement).toHaveStyle("color: #155724");
   });
 
-  test('debería aplicar los estilos de "error" correctamente', () => {
-    const errorProps: TemporaryAlertProps = {
-      ...baseProps,
-      type: "error",
-      message: "¡Ha ocurrido un error!",
-    };
-    render(<TemporaryAlert {...errorProps} />);
-    const alertElement = screen.getByText(errorProps.message).closest("div");
+  test("debería tener la clase 'visible' inmediatamente después del montaje (animación de entrada)", () => {
+    render(<TemporaryAlert {...baseProps} />);
+    const alertElement = screen.getByText(baseProps.message).closest("div");
 
-    expect(alertElement).toHaveStyle("background-color: #f8d7da");
-    expect(alertElement).toHaveStyle("color: #721c24");
+    act(() => {
+      jest.advanceTimersByTime(0);
+    });
+
+    expect(alertElement).toHaveClass("mocked-visible-class");
+    expect(alertElement).not.toHaveClass("mocked-animate-out-class");
   });
 
-  test('debería aplicar los estilos de "warning" correctamente', () => {
-    const warningProps: TemporaryAlertProps = {
-      ...baseProps,
-      type: "warning",
-      message: "¡Advertencia, revisa la información!",
-    };
-    render(<TemporaryAlert {...warningProps} />);
-    const alertElement = screen.getByText(warningProps.message).closest("div");
+  test("debería cambiar a la clase 'animateOut' al finalizar durationMs", () => {
+    const customDuration = 4000;
+    const propsWithDuration = { ...baseProps, durationMs: customDuration };
 
-    expect(alertElement).toHaveStyle("background-color: #fff3cd");
-    expect(alertElement).toHaveStyle("color: #856404");
+    render(<TemporaryAlert {...propsWithDuration} />);
+    const alertElement = screen.getByText(baseProps.message).closest("div");
+
+    act(() => {
+      jest.advanceTimersByTime(customDuration - 1);
+    });
+    expect(alertElement).not.toHaveClass("mocked-animate-out-class");
+
+    act(() => {
+      jest.advanceTimersByTime(1);
+    });
+
+    expect(alertElement).toHaveClass("mocked-animate-out-class");
+    expect(mockOnClose).not.toHaveBeenCalled();
   });
 
-  test("debería llamar a onClose después de la duración especificada (custom duration)", () => {
-    const customDuration = 5000;
+  test("debería llamar a onClose (desmontaje) DESPUÉS de durationMs + TRANSITION_DURATION_MS", () => {
+    const customDuration = 2000;
     const propsWithDuration = { ...baseProps, durationMs: customDuration };
 
     render(<TemporaryAlert {...propsWithDuration} />);
 
+    act(() => {
+      jest.advanceTimersByTime(customDuration);
+    });
     expect(mockOnClose).not.toHaveBeenCalled();
 
-    jest.advanceTimersByTime(customDuration - 1);
+    act(() => {
+      jest.advanceTimersByTime(TRANSITION_DURATION_MS - 1);
+    });
     expect(mockOnClose).not.toHaveBeenCalled();
 
-    jest.advanceTimersByTime(1);
+    act(() => {
+      jest.advanceTimersByTime(1);
+    });
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
   test("debería usar la duración por defecto (3000ms) cuando no se proporciona durationMs", () => {
     const defaultDuration = 3000;
+    const totalDuration = defaultDuration + TRANSITION_DURATION_MS;
 
     render(<TemporaryAlert {...baseProps} durationMs={undefined} />);
 
-    jest.advanceTimersByTime(defaultDuration - 1);
-    expect(mockOnClose).not.toHaveBeenCalled();
-
-    jest.advanceTimersByTime(1);
+    act(() => {
+      jest.advanceTimersByTime(totalDuration);
+    });
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });

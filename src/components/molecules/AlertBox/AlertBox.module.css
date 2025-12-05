@@ -1,13 +1,31 @@
 .alert {
   position: fixed;
-  top: 92vh;
-  right: 20px;
+  top: 90vh;
+  right: 1px;
+  z-index: 1000;
+
   padding: 12px 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0 0 0 0.1);
-  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0 0 0 0.2);
   font-weight: bold;
-  opacity: 1;
   border: 2px solid #000000e8;
-  transition: all 0.3s ease;
+  min-width: 250px;
+
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.alert.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.alert.animateOut {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
 }
