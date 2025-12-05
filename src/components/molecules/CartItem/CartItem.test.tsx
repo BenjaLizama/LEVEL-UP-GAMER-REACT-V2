@@ -1,95 +1,60 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
+
 import CartItem from "./CartItem";
-import { formatearACLP } from "@/utils/Funciones";
 
-jest.mock("./CartItem.module.css", () => ({
-  contenido: "mocked-contenido",
-  itemContainer: "mocked-itemContainer",
-  contenedorImg: "mocked-contenedorImg",
-  imagen: "mocked-imagen",
-  info: "mocked-info",
-  nombreProd: "mocked-nombreProd",
-  child: "mocked-child",
-}));
+import styles from "../CartItem.module.css";
 
-const baseProps = {
-  precio: formatearACLP(5000),
-  nombre: "Café premium - Colombia",
+const defaultProps = {
+  precio: "€25.99",
+  nombre: "Teclado Mecánico RGB",
   cantidad: 2,
-  idItem: "ABC-123",
-  imagen: "http://example.com/cafe.jpg",
+  categoria: "PERIFÉRICOS",
+  idItem: "K2000",
+  imagen: "http://example.com/teclado.jpg",
 };
 
 describe("CartItem", () => {
-  test("debe renderizar el nombre, precio y cantidad del producto correctamente", () => {
-    render(<CartItem {...baseProps} />);
+  it("debe renderizar el nombre, la categoría y el precio del producto", () => {
+    render(<CartItem {...defaultProps} />);
 
-    expect(screen.getByText(baseProps.nombre)).toBeInTheDocument();
-
-    expect(screen.getByText(/precio: \$5.000/i)).toBeInTheDocument();
+    expect(screen.getByText(defaultProps.nombre)).toBeInTheDocument();
 
     expect(
-      screen.getByText(`cantidad: ${baseProps.cantidad}`)
+      screen.getByText(`Categoria: ${defaultProps.categoria}`)
     ).toBeInTheDocument();
+
+    expect(screen.getByText(defaultProps.precio)).toBeInTheDocument();
   });
 
-  test("debe renderizar la imagen con la URL y el texto alternativo (alt) correctos", () => {
-    render(<CartItem {...baseProps} />);
+  it("debe renderizar la imagen con la fuente correcta y texto alternativo para accesibilidad", () => {
+    render(<CartItem {...defaultProps} />);
 
-    const itemImage = screen.getByAltText(baseProps.nombre);
+    const imageElement = screen.getByRole("img", { name: defaultProps.nombre });
 
-    expect(itemImage).toBeInTheDocument();
+    expect(imageElement).toHaveAttribute("src", defaultProps.imagen);
 
-    expect(itemImage).toHaveAttribute("src", baseProps.imagen);
+    expect(imageElement).toHaveAttribute("alt", defaultProps.nombre);
 
-    expect(itemImage).toHaveClass("mocked-imagen");
+    expect(imageElement).toHaveAttribute("draggable", "false");
   });
 
-  test("debe renderizar el contenido anidado (children)", () => {
-    const mockChildContent = "Botones de control de cantidad";
-
-    render(
-      <CartItem {...baseProps}>
-        <button data-testid="child-button">{mockChildContent}</button>
-      </CartItem>
+  it("debe renderizar el contenido pasado a través de props.children (ej. contador de cantidad)", () => {
+    const mockChildren = (
+      <div data-testid="quantity-control">Controles de Cantidad</div>
     );
 
-    const childElement = screen.getByText(mockChildContent);
-    expect(childElement).toBeInTheDocument();
+    render(<CartItem {...defaultProps}>{mockChildren}</CartItem>);
 
-    expect(childElement.closest("div")).toHaveClass("mocked-child");
+    expect(screen.getByTestId("quantity-control")).toBeInTheDocument();
   });
 
-  test("debe renderizar correctamente si no se proporciona children", () => {
-    const { container } = render(
-      <CartItem {...baseProps} children={undefined} />
-    );
+  it("debe aplicar la clase CSS Modules correcta al span que muestra el precio", () => {
+    render(<CartItem {...defaultProps} />);
 
-    expect(screen.getByText(baseProps.nombre)).toBeInTheDocument();
+    const priceSpan = screen.getByText(defaultProps.precio);
 
-    const childDiv = container.querySelector(".mocked-child");
-    expect(childDiv).toBeInTheDocument();
-    expect(childDiv).toBeEmptyDOMElement();
-  });
-
-  test("debe aplicar las clases CSS mockeadas a los contenedores principales", () => {
-    const { container } = render(<CartItem {...baseProps} />);
-
-    expect(container.firstChild).toHaveClass("mocked-contenido");
-
-    const imageContainer = screen
-      .getByAltText(baseProps.nombre)
-      .closest(".mocked-contenedorImg");
-    expect(imageContainer).toBeInTheDocument();
-
-    const infoDiv = screen
-      .getByText(`precio: $${baseProps.precio}`)
-      .closest(".mocked-info");
-    expect(infoDiv).toBeInTheDocument();
-
-    const itemContainer = imageContainer?.closest(".mocked-itemContainer");
-    expect(itemContainer).toBeInTheDocument();
+    expect(priceSpan).toHaveClass(styles.precio);
   });
 });

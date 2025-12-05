@@ -28,7 +28,9 @@ export default function CartItem(props: PlantillaProps) {
           <div className={styles.informacionProductoContainer}>
             <div className={styles.datos}>
               <p className={styles.categoria}>Categoria: {props.categoria}</p>
-              <p className={styles.precio}>Precio: {props.precio}</p>
+              <p className={styles.precioContainer}>
+                Precio: <span className={styles.precio}>{props.precio}</span>
+              </p>
             </div>
             <div className={styles.child}>{props.children}</div>
           </div>

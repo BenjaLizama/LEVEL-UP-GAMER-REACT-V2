@@ -59,6 +59,12 @@
 
 .nombreProd {
   font-size: 20px;
+  display: -webkit-box;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  width: 100%;
 }
 
 .datos {
