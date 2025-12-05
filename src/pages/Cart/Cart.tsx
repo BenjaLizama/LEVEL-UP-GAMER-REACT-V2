@@ -3,7 +3,7 @@ import styles from "./Cart.module.css";
 import { Producto } from "@/models/Producto";
 import { productoService } from "@/services/ProductoService";
 import { enriqucerCarrito } from "@/utils/CarritoHelper";
-import { useCartData } from "@/utils/useCartData";
+import { useCartData } from "@/hooks/useCartData";
 import CartTemplate from "@/components/templates/CartTemplate/CartTemplate";
 import Empty from "@/components/atoms/Empty/Empty";
 import { EMPTY_CART } from "@/utils/Icons";
