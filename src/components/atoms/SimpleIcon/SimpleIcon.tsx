@@ -7,6 +7,7 @@ interface SimpleIconProps {
   fontSize: number;
   color?: string;
   shadow?: boolean;
+  className?: string;
 }
 
 export default function SimpleIcon({
@@ -14,13 +15,18 @@ export default function SimpleIcon({
   fontSize,
   color,
   shadow = false,
+  className,
 }: SimpleIconProps) {
+  const shadowClass = shadow ? styles.shadow : "";
+
+  const finalClassName = `${className || ""} ${shadowClass}`.trim();
+
   return (
     <Icon
       icon={icon}
       fontSize={fontSize}
       color={color}
-      className={shadow ? styles.shadow : ""}
+      className={finalClassName}
     />
   );
 }

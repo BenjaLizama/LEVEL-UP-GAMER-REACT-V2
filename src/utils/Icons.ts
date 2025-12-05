@@ -26,6 +26,9 @@ const TRASH = "fa6-solid:trash";
 const ADD = "fa7-solid:add";
 const REMOVE = "mingcute:minimize-fill";
 const EMPTY_CART = "solar:cart-4-bold";
+const SUCCESS = "qlementine-icons:success-12";
+const ERROR = "icon-park-outline:error";
+const REFRESH = "weui:refresh-filled";
 
 export {
   HOME,
@@ -56,4 +59,7 @@ export {
   ADD,
   REMOVE,
   EMPTY_CART,
+  SUCCESS,
+  ERROR,
+  REFRESH,
 };
