@@ -1,8 +1,6 @@
+import { carritosApi } from "./AxiosConfig";
 import { Carrito } from "@/models/Carrito";
 import { ItemCarrito } from "@/models/ItemCarrito";
-import { carritosApi } from "@/services/AxiosConfig";
-
-type VoidFunction = () => void;
 
 export class CarritoService {
   private cartItems: ItemCarrito[] = [];
@@ -51,6 +49,36 @@ export class CarritoService {
       this.updateState(response.data);
     } catch (error) {
       console.error("Error al obtener el carrito:", error);
+    }
+  }
+
+  async removeItemCart(codigoProducto: string): Promise<void> {
+    const idUsuario = this.getUserId();
+    if (!idUsuario) return;
+
+    try {
+      const response = await carritosApi.put<Carrito>(
+        `/${idUsuario}/items/remover/${codigoProducto}`
+      );
+
+      this.updateState(response.data);
+    } catch (error) {
+      console.error("Error al remover item del carrito:", error);
+    }
+  }
+
+  async deleteItemCart(codigoProducto: string): Promise<void> {
+    const idUsuario = this.getUserId();
+    if (!idUsuario) return;
+
+    try {
+      const response = await carritosApi.delete<Carrito>(
+        `/${idUsuario}/items/${codigoProducto}`
+      );
+
+      this.updateState(response.data);
+    } catch (error) {
+      console.error("Error al eliminar el item del carrito", error);
     }
   }
 

@@ -1,10 +1,18 @@
 import { SignupDTO } from "@/models/dto/SignupDTO";
 import { LoginDTO } from "@/models/dto/LoginDTO";
 import { Usuario } from "@/models/Usuario";
-import axios from "axios";
-import { authApi, usuariosApi } from "@/services/AxiosConfig";
+import axios, { AxiosResponse } from "axios";
+import { authApi, usuariosApi, pagosApi } from "@/services/AxiosConfig";
 
 const SERVER_ROOT = "http://localhost:8083";
+
+interface PaymentSessionResponse {
+  url: string;
+}
+
+interface ConfirmationResponse {
+  message: string;
+}
 
 const buildAbsoluteImageUrl = (relativePath: string): string => {
   if (!relativePath) return "";
@@ -14,6 +22,28 @@ const buildAbsoluteImageUrl = (relativePath: string): string => {
     : relativePath;
 
   return `${SERVER_ROOT}/${path}`;
+};
+
+const handleResponse = (response: AxiosResponse<Usuario>): Usuario => {
+  const usuario: Usuario = response.data;
+  if (usuario.imagenPerfilURL) {
+    usuario.imagenPerfilURL = buildAbsoluteImageUrl(usuario.imagenPerfilURL);
+  }
+  return usuario;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const handleAxiosError = (error: any, defaultErrorMessage: string): void => {
+  if (axios.isAxiosError(error) && error.response) {
+    console.error(
+      `Error ${error.response.status} en la API:`,
+      error.message,
+      error.response.data
+    );
+  } else {
+    console.error("Error desconocido:", error);
+  }
+  throw new Error(defaultErrorMessage);
 };
 
 export const usuarioService = {
@@ -26,14 +56,7 @@ export const usuarioService = {
         localStorage.setItem("authToken", response.data.token);
       }
 
-      const usuario: Usuario = response.data;
-      if (usuario.imagenPerfilURL) {
-        usuario.imagenPerfilURL = buildAbsoluteImageUrl(
-          usuario.imagenPerfilURL
-        );
-      }
-
-      return usuario;
+      return handleResponse(response as AxiosResponse<Usuario>);
     } catch (error) {
       console.error("Error al acceder: ", error);
       throw error;
@@ -42,15 +65,8 @@ export const usuarioService = {
 
   signup: async (informacion: SignupDTO): Promise<Usuario> => {
     try {
-      const response = await authApi.post<Usuario>("", informacion);
-
-      const usuario: Usuario = response.data;
-      if (usuario.imagenPerfilURL) {
-        usuario.imagenPerfilURL = buildAbsoluteImageUrl(
-          usuario.imagenPerfilURL
-        );
-      }
-      return usuario;
+      const response = await authApi.post<Usuario>("/signup", informacion);
+      return handleResponse(response);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const status = error.response.status;
@@ -62,10 +78,8 @@ export const usuarioService = {
           console.error("Error: Datos inválidos.");
           throw new Error("Datos de registro inválidos.");
         }
-        console.error(`Error ${status} al crear el usuario: `, error.message);
-      } else {
-        console.error("Error desconocido al crear el usuario: ", error);
       }
+      handleAxiosError(error, "Fallo la operación de registro.");
       throw new Error("Fallo la operación de registro.");
     }
   },
@@ -87,19 +101,12 @@ export const usuarioService = {
         }
       );
 
-      const usuario = response.data;
-      if (usuario.imagenPerfilURL) {
-        usuario.imagenPerfilURL = buildAbsoluteImageUrl(
-          usuario.imagenPerfilURL
-        );
-      }
-
-      return usuario;
+      return handleResponse(response);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
         throw new Error("URL inválida o formato no soportado.");
       }
-      console.error("Error al actualizar imagen:", error);
+      handleAxiosError(error, "Fallo la operación de actualización de imagen.");
       throw new Error("Fallo la operación de actualización de imagen.");
     }
   },
@@ -126,18 +133,9 @@ export const usuarioService = {
         }
       );
 
-      const usuario = response.data;
-      if (usuario.imagenPerfilURL) {
-        usuario.imagenPerfilURL = buildAbsoluteImageUrl(
-          usuario.imagenPerfilURL
-        );
-      }
-
-      return usuario;
+      return handleResponse(response);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Error Backend:", error.response?.data);
-      }
+      handleAxiosError(error, "Error al subir el archivo.");
       throw new Error("Error al subir el archivo.");
     }
   },
@@ -145,21 +143,58 @@ export const usuarioService = {
   obtenerUsuarioPorId: async (idUsuario: number): Promise<Usuario> => {
     try {
       const response = await usuariosApi.get<Usuario>(`/${idUsuario}`);
-
-      const usuario: Usuario = response.data;
-      if (usuario.imagenPerfilURL) {
-        usuario.imagenPerfilURL = buildAbsoluteImageUrl(
-          usuario.imagenPerfilURL
-        );
-      }
-
-      return usuario;
+      return handleResponse(response);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
         throw new Error("Usuario no encontrado.");
       }
-      console.error("Error obteniendo usuario:", error);
+      handleAxiosError(error, "Fallo la operación de obtención de usuario.");
       throw new Error("Fallo la operación de obtención de usuario.");
+    }
+  },
+
+  pagar: async (): Promise<PaymentSessionResponse> => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const response = await pagosApi.post<any>(`/pagar`);
+
+      if (!response.data || !response.data.url) {
+        throw new Error("La API no devolvio una URL de pago valida");
+      }
+
+      return response.data as PaymentSessionResponse;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 400) {
+        throw new Error("Error al proceder con el pago");
+      }
+      handleAxiosError(error, "Fallo la operación de pago.");
+      throw new Error("Fallo la operación de pago.");
+    }
+  },
+
+  confirmarPago: async (sessionId: string): Promise<string> => {
+    try {
+      const response = await pagosApi.get<ConfirmationResponse>(
+        "/confirmar-pago",
+        {
+          params: {
+            session_id: sessionId,
+          },
+        }
+      );
+
+      return (
+        response.data.message || "Compra verificada y finalizada con exito."
+      );
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage =
+          error.response.data?.body || "Error al verificar el pago";
+        throw new Error(errorMessage);
+      }
+
+      handleAxiosError(error, "Fallo la operacion de confirmacion de pago.");
+      throw new Error("Fallo la operacion de confirmacion de pago.");
     }
   },
 };

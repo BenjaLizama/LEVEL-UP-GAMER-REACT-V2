@@ -5,6 +5,7 @@ const DIRECCION_IP = "localhost";
 
 export const URLS = {
   AUTH: `http://${DIRECCION_IP}:8083/api/auth`,
+  PAGOS_STRIPE: `http://${DIRECCION_IP}:8083/api/stripe`,
   USUARIOS: `http://${DIRECCION_IP}:8083/api/usuarios`,
   PRODUCTOS: `http://${DIRECCION_IP}:8082/api/productos`,
   CARRITOS: `http://${DIRECCION_IP}:8081/api/carritos`,
@@ -41,6 +42,7 @@ const crearInstanciaApi = (baseURL: string): AxiosInstance => {
 };
 
 export const authApi = crearInstanciaApi(URLS.AUTH);
+export const pagosApi = crearInstanciaApi(URLS.PAGOS_STRIPE);
 export const usuariosApi = crearInstanciaApi(URLS.USUARIOS);
 export const productosApi = crearInstanciaApi(URLS.PRODUCTOS);
 export const carritosApi = crearInstanciaApi(URLS.CARRITOS);
