@@ -2,7 +2,7 @@ import axios from "axios";
 import { Producto } from "@/models/Producto";
 
 // Esto fue actualizado
-const API_URL = "http://54.85.135.89:8082/api/productos";
+const API_URL = "http://localhost:8082/api/productos";
 
 export const productoService = {
   getAllProducts: async (): Promise<Producto[]> => {

@@ -29,6 +29,7 @@ const EMPTY_CART = "solar:cart-4-bold";
 const SUCCESS = "qlementine-icons:success-12";
 const ERROR = "icon-park-outline:error";
 const REFRESH = "weui:refresh-filled";
+const EDIT = "tabler:edit";
 
 export {
   HOME,
@@ -62,4 +63,5 @@ export {
   SUCCESS,
   ERROR,
   REFRESH,
+  EDIT,
 };

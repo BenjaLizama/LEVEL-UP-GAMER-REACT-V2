@@ -12,7 +12,7 @@ import FullScreenMenu, {
 import Login from "./pages/Login/Login";
 import Signup from "./pages/SignUp/Signup";
 import PaymentSuccessPage from "./pages/PaymentSuccess/PaymentSuccess";
-// import Test from "./pages/Test";
+import Test from "./pages/Test";
 
 export default function App() {
   const [modoClaro, setModoClaro] = useState(() => {
@@ -71,7 +71,7 @@ export default function App() {
           <Route path="/pago-exitoso" element={<PaymentSuccessPage />} />
 
           {/* Esto debe ser eliminado en la version final */}
-          {/* <Route path="/test" element={<Test />} /> */}
+          <Route path="/test" element={<Test />} />
         </Routes>
       </main>
     </div>
