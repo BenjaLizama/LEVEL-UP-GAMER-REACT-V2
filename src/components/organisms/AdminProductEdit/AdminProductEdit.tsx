@@ -4,6 +4,7 @@ import { formatearACLP } from "@/utils/Funciones";
 import Button from "@/components/atoms/Button/Button";
 import SimpleIcon from "@/components/atoms/SimpleIcon/SimpleIcon";
 import { X } from "@/utils/Icons";
+import { CATEGORIAS_POR_DEFECTO } from "@/models/Categoria";
 
 interface AdminProductEditProps {
   titulo: string;
@@ -68,12 +69,18 @@ export default function AdminProductEdit({
             name="categoria"
             id="id-categoria"
             aria-label="categoria del producto"
-            value={categoriaProducto || "categoria"}
+            value={categoriaProducto || ""}
             className={styles.select}
             onChange={(e) => onCategoriaChange?.(e)}
           >
-            <option value="categoria">Categoria</option>
-            <option value="JUEGO_MESA">Juego Mesa</option>
+            <option value="" disabled>
+              Seleccione una categoría
+            </option>
+            {CATEGORIAS_POR_DEFECTO.map((cat) => (
+              <option key={cat.id} value={cat.value}>
+                {cat.nombreVisible}
+              </option>
+            ))}
           </select>
           <input
             type="text"

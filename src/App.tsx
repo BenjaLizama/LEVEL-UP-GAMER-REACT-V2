@@ -13,6 +13,8 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/SignUp/Signup";
 import PaymentSuccessPage from "./pages/PaymentSuccess/PaymentSuccess";
 import Test from "./pages/Test";
+import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
+import AdminGuard from "./utils/AdminGuard";
 
 export default function App() {
   const [modoClaro, setModoClaro] = useState(() => {
@@ -69,7 +71,14 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Signup />} />
           <Route path="/pago-exitoso" element={<PaymentSuccessPage />} />
-
+          <Route
+            path="/admin/productos"
+            element={
+              <AdminGuard>
+                <AdminDashboard />
+              </AdminGuard>
+            }
+          />
           {/* Esto debe ser eliminado en la version final */}
           <Route path="/test" element={<Test />} />
         </Routes>
