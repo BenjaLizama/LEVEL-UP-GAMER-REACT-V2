@@ -17,7 +17,7 @@ export default function Home() {
   ];
 
   return (
-    <>
+    <div className={styles.containerPrincipal}>
       <div className={styles.carouselContainer}>
         <span className={styles.title}>Proximos lanzamientos</span>
         <Carousel listImages={lista_imagenes} />
@@ -59,6 +59,6 @@ export default function Home() {
       <div className={styles.footerContainer}>
         <Footer />
       </div>
-    </>
+    </div>
   );
 }

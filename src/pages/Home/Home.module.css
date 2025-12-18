@@ -1,3 +1,9 @@
+.containerPrincipal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .carouselContainer {
   margin-top: 3rem;
   display: flex;
@@ -53,6 +59,10 @@
 }
 
 @media (min-width: 768px) {
+  .containerPrincipal {
+    margin: 0rem 4rem;
+  }
+
   .guias {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto 1fr 1fr;
@@ -61,5 +71,11 @@
 
   .guias > :first-child {
     grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .containerPrincipal {
+    margin: 0rem 25%;
   }
 }
