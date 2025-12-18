@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  user-select: none;
+}
+
+.container button {
+  z-index: 500;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: none;
+  color: var(--color-texto-principal);
+  font-size: 2rem;
+  transition: all 0.3s ease;
+  will-change: transform;
+}
+
+.container button:hover {
+  transform: scale(1.1) translateZ(0);
+}
+
+.carousel {
+  height: auto;
+  width: 100%;
+  overflow: hidden;
+}
+
+.slideContainer {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+}
+
+.carousel img {
+  position: relative;
+  width: 100%;
+  min-width: 100%;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.btnPrev {
+  position: absolute;
+  left: 0;
+}
+
+.btnNext {
+  position: absolute;
+  right: 0;
+}

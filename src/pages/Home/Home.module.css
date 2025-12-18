@@ -1,0 +1,65 @@
+.carouselContainer {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-family: var(--fuente-encabezado);
+  font-size: 2rem;
+  color: var(--color-fuente-principal);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.guiasContainer {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.guias {
+  display: grid;
+  gap: 1rem;
+}
+
+.tweetsContainer {
+  margin-top: 3rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mapsContainer {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.aboutUsContainer {
+  margin-top: 3rem;
+}
+
+.footerContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .guias {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .guias > :first-child {
+    grid-column: 1 / -1;
+  }
+}

@@ -30,6 +30,8 @@ const SUCCESS = "qlementine-icons:success-12";
 const ERROR = "icon-park-outline:error";
 const REFRESH = "weui:refresh-filled";
 const EDIT = "tabler:edit";
+const NEXT = "ooui:next-ltr"
+const PREV = "ooui:next-rtl"
 
 export {
   HOME,
@@ -64,4 +66,6 @@ export {
   ERROR,
   REFRESH,
   EDIT,
+  NEXT,
+  PREV
 };
