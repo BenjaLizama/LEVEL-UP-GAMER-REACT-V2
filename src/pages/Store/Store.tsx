@@ -7,6 +7,8 @@ import CategoryFilter from "@/components/molecules/CategoryFilter/CategoryFilter
 import { CATEGORIAS_POR_DEFECTO } from "@/models/Categoria";
 import Input from "@/components/atoms/Input/Input";
 import { SEARCH } from "@/utils/Icons";
+import { isAdmin } from "@/utils/RoleHelper";
+import AdminProductEdit from "@/components/organisms/AdminProductEdit/AdminProductEdit";
 
 export default function Store() {
   const [productos, setProductos] = useState<Producto[]>([]);

@@ -1,5 +1,7 @@
 import axios from "axios";
 import { Producto } from "@/models/Producto";
+import { ActualizarProductoDTO } from "@/models/dto/ActualizarProductoDTO";
+import { productosApi } from "./AxiosConfig";
 
 // Esto fue actualizado
 const API_URL = "http://localhost:8082/api/productos";
@@ -36,6 +38,19 @@ export const productoService = {
       return response.data;
     } catch (error) {
       console.error("Error al filtrar productos por categoria: ", error);
+      throw error;
+    }
+  },
+  actualizarProducto: async (
+    codigoProducto: string,
+    datosNuevos: ActualizarProductoDTO
+  ): Promise<Producto> => {
+    try {
+      const url = `/${codigoProducto}`;
+      const response = await productosApi.put<Producto>(url, datosNuevos);
+
+      return response.data;
+    } catch (error) {
       throw error;
     }
   },
