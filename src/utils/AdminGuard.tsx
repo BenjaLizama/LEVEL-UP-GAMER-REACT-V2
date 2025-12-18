@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { isAdmin } from "@/utils/RoleHelper"; // Tu función que chequea el token
+import { isAdmin } from "@/utils/RoleHelper";
 
 interface AdminGuardProps {
   children: React.ReactNode;

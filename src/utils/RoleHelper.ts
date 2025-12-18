@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 
 export interface userRol {
-  rol: String;
+  rol: string;
 }
 
 export const GetUserRole = (): userRol | null => {
